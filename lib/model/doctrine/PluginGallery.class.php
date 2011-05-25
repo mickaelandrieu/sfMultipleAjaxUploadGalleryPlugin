@@ -12,6 +12,15 @@
  */
 abstract class PluginGallery extends BaseGallery {
 
+    public function save(Doctrine_Connection $conn = null) {
+        if(!$this->isNew()){
+            $oldSlug = Doctrine::getTable("Gallery")->find($this->getId())->getSlug();
+            rename(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . $oldSlug . '/',
+                    sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . PluginUtils::slugify($this->getTitle()) . '/');
+        }
+        parent::save($conn);
+    }
+
     public function  delete(Doctrine_Connection $conn = null) {
         parent::delete($conn);
         if(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_onDelete")== "cascade")
