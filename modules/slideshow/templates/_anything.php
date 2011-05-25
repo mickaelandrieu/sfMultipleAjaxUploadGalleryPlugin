@@ -7,16 +7,14 @@
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/anything/js/jquery.easing.1.2.js");?>
 
 <?php
-    $uploadDir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
-    $webDir = sfConfig::get("sf_web_dir");
-    $correctPath = substr($uploadDir, strlen($webDir), strlen($uploadDir) - strlen($webDir));
+    $correctPath = PluginUtils::gallery_path();
 ?>
 
 <ul id="slider1">
         <?php foreach ($gallery->getPhotos() as $photo) { ?>
             <li>
                 <a name="<?php echo $photo->getTitle() ?>" href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
-                    <img src="<?php echo $correctPath.$gallery->getSlug()."/450/"."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
+                    <img src="<?php echo $correctPath.$gallery->getSlug()."/450/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
                 </a>
                             <?php echo $photo->getTitle() ?>
                 </div>

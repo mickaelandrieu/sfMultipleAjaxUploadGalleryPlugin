@@ -48,9 +48,8 @@
     <ul class="thumbs noscript">
 
         <?php
-        $uploadDir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
-        $webDir = sfConfig::get("sf_web_dir");
-        $correctPath = substr($uploadDir, strlen($webDir), strlen($uploadDir) - strlen($webDir)); ?>
+        $correctPath = PluginUtils::gallery_path();
+        ?>
 
         <?php foreach ($gallery->getPhotos() as $photo) {
  ?>
@@ -60,7 +59,7 @@
                 </a>
                 <div class="caption">
                     <div class="download">
-                        <a href="<?php echo $correctPath.$photo->getPicPath() ?>">TÃ©lÃ©charger la photo</a>
+                        <a href="<?php echo $correctPath.$photo->getPicPath() ?>">Télécharger la photo</a>
                     </div>
                     <div class="image-desc"><?php echo $photo->getTitle() ?></div>
                 </div>

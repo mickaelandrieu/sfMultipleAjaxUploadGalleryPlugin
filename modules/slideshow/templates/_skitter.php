@@ -4,9 +4,7 @@
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/skitter/js/jquery.skitter.min.js");?>
 
 <?php
-    $uploadDir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
-    $webDir = sfConfig::get("sf_web_dir");
-    $correctPath = substr($uploadDir, strlen($webDir), strlen($uploadDir) - strlen($webDir));
+$correctPath = PluginUtils::gallery_path();
 ?>
 
 <div class="box_skitter box_skitter_large">
@@ -14,7 +12,7 @@
         <?php foreach ($gallery->getPhotos() as $photo) { ?>
             <li>
                 <a class="block" name="<?php echo $photo->getTitle() ?>" href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
-                    <img src="<?php echo $correctPath.$gallery->getSlug()."/450/"."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
+                    <img src="<?php echo $correctPath.$gallery->getSlug()."/450/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
                 </a>
                 <div class="label_text">
                     <p>Texte : <?php echo $photo->getTitle() ?></p>
@@ -40,6 +38,6 @@
                     fullscreen: <?php echo $isFullscreen ?>
                 }
             );
-        });    
+        });
     });
 </script>
