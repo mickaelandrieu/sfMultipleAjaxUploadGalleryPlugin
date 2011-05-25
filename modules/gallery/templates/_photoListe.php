@@ -1,38 +1,104 @@
-<?php use_stylesheet("../sfMultipleAjaxUploadGalleryPlugin/css/photos.css") ?>
-<script>
-    function titlize(id){
-        $('.editable').hide();
-        if(!$('#'+id).hasClass('clicked')){
-            $('.editable').removeClass('clicked');
-            $('#'+id).show().addClass('clicked');
-        }else{
-            $('.editable').removeClass('clicked');
-        }
-    }
+<?php use_stylesheet("../sfMultipleAjaxUploadGalleryPlugin/css/theme/".sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_csstheme")."/photos.css") ?>
+<?php use_helper('I18N') ?>
+<?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/js/jquery/jquery-ui-1.8.10.custom.min.js") ?>
+<?php use_javascript("http://github.com/malsup/blockui/raw/master/jquery.blockUI.js?v2.31") ?>
+<?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/js/jscolor.js") ?>
 
+<?php
+    $app_name = $sf_context->getConfiguration()->getApplication();
+    if(strcmp($sf_context->getConfiguration()->getEnvironment(),'prod') != 0)
+    {$app_name .= '_'.$sf_context->getConfiguration()->getEnvironment();}
+?>
+<style type="text/css">
+        fieldset.optdual { width: 500px; }
+        .optdual { position: relative; }
+        .optdual .offset { position: absolute; left: 18em; }
+        .optlist label { width: 16em; display: block; }
+        #dl_links { margin-top: .5em; }
+        #photos-list { list-style-type: none; margin: 0; padding: 0; }
+	#photos-list li { margin: 3px 3px 3px 0; padding: 1px; float: left; font-size: 4em; text-align: center; }
+	</style>
+
+<script>
+function showActionFull() {;
+    var hasEditing = false;
+    $('.contextual').each(function(index) {
+        if ($(this).css('display') == 'block') {
+            hasEditing = true;
+        }
+    });
+    if (!hasEditing) {
+        $('.photo_action_full').slideDown('fast');
+    }
+};
     function saveTitle(id){
         var title = $('#' + id + '_value').val();
-        $.post('/backend.php/photos/updateTitle',
+        $.blockUI({ message: '<br/><h1><?php echo __('Please wait...') ?></h1><br/><img src="/sfMultipleAjaxUploadGalleryPlugin/images/loadingAnimation.gif" alt=""/><br/>' });
+        $.post('/<?php echo $app_name ?>.php/photos/updateTitle',
             {id: id, title : title},
             function(data){
-                $('#ajax-loader').show();
                 $('#sf_admin_container').prepend("<div class='notice'>"+data+"</div>");
-                setTimeout(function(){
-                    $("#ajax-loader").slideUp()
-                }, 1000);
-                $('.editable').hide();
-            $('.editable').removeClass('clicked');
+                $('.notice').delay(2000).slideUp('slow');
+                $('#actions_' + id).slideUp('slow', function () {
+                        showActionFull();
+                        $.unblockUI();
+                });
             });
     }
 
     function ajaxPhotoEdition(url){
+        $.blockUI({ message: '<br/><h1><?php echo __('Please wait...') ?></h1><br/><img src="/sfMultipleAjaxUploadGalleryPlugin/images/loadingAnimation.gif" alt=""/><br/>' });
         $.post(url,
             {},
             function(data){
-                $("#pictures_list").html(data);
-            });
+                var elem = data.split(';;');
+                if (elem.length > 1 && elem[0] == 'json') {
+                    $.blockUI({
+                            message: elem[1],
+                            theme:     true
+                         });
+                    $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
+                } else {
+                    $("#pictures_list").html(data);
+                    $.growlUI('Success Notification', 'Success Operation');
+                    
+                }
+       });
+        /*
+        .error(function() {
+            $.unblockUI();
+            $.growlUI('Error Notification', 'Error Ajax Execution');
+            $('div.growlUI').addClass('growlUIError');
+        })*/
     }
+
+    <?php if($photos->count()>0){?>
+    $(function() {
+            $( "#photos-list" ).sortable({
+                            handle: '.basic',
+                            update: function(){
+                                    $('#working').show();
+                                    var order = $('#photos-list').sortable('serialize');
+                                    $.post('/<?php echo $app_name ?>.php/gallery/ajaxPhotoOrder?id=<?php echo $photos->getFirst()->getGallery()->getId()?>&'+order,
+                                            {},
+                                            function(data){
+                                                    $("#pictures_list").html(data);
+                                                    $('#working').hide();
+                                            });
+                            }
+            });
+            $( "#photos-list" ).disableSelection();
+        });
+    <?php } ?>
+
 </script>
+<?php if ($sf_user->hasFlash('ajax_notice')): ?>
+  <div class="notice"><?php echo $sf_user->getFlash('ajax_notice') ?></div>
+<?php endif ?>
+
+<?php if ($sf_user->hasFlash('ajax_error')): ?>
+  <div class="error"><?php echo $sf_user->getFlash('ajax_error') ?></div>
+<?php endif ?>
 <table border="0" width="100%" cellpadding="0" cellspacing="0" id="gallery_content">
     <tr>
         <th rowspan="3"></th>
@@ -50,35 +116,87 @@
                 <!--  start table-content  -->
                 <div id="gallery_table-content" style="min-height: 0px;">
                     <?php
-                    //$photos = $gall->getPhotos();
-                    if($photos->count() > 0): ?>
-                        <?php foreach( $photos as $i=>$photo ): ?>
-                        <div style="background: none repeat scroll 0 0 #F3F3F3; border: 1px dashed #5D5D5D; clear: both; display: none; margin-top: 15px; padding: 5px;" id="<?php echo $photo->getId(); ?>_editable" class="editable">
-                            <div style="float: left;margin-right: 5px"><img class="basic" src="/uploads/gallery/<?php echo $photo->getGalleryId()."/50/".$photo->getPicpath(); ?>"/></div>
-                            <p>Indiquez la description pour l'image sélectionnée</p>
-                            <input id="<?php echo $photo->getId()."_value" ?>" type="textarea" value="<?php echo $photo->getTitle() ?>"/>
-                            <input onclick="saveTitle(<?php echo $photo->getId();?>)" type="button" value="OK"/>
-                            <a href="#" onclick="ajaxPhotoEdition('<?php echo url_for('photo_ajax_default', $photo) ?>')" class="default"><img src="/sfMultipleAjaxUploadGalleryPlugin/images/starrize.png" title="Utiliser cette image comme photo de couverture" /></a>
-                            <a href="#" onclick="ajaxPhotoEdition('<?php echo url_for('photo_ajax_delete', $photo) ?>')" class="delete"><img src="/sfMultipleAjaxUploadGalleryPlugin/images/trash.png" title="Supprimer"/></a>
-                        </div>
-                        <?php endforeach; ?>
-                        <?php foreach( $photos as $i=>$photo ): ?>
-                        <div id="photo-<?php echo $photo->getId()?>" class="picture"  onclick="$(this).find('.actions').toggle();titlize('<?php echo $photo->getId(); ?>_editable');" onmouseover="$(this).find('.actions').show();" onmouseout="$(this).find('.actions').hide();">
-                            <?php if($photo->getIsDefault()){ ?> <div id="default" title="Cette photo est l'image utilisée pour la couverture de la galerie"></div><?php } ?>
-                            <img class="basic" src="/uploads/gallery/<?php echo $photo->getGalleryId()."/50/".$photo->getPicpath(); ?>"/>
-                          <div class="actions">
-                            <?php if(!$photo->getIsDefault()): ?>
+                    $sizes = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_thumbnails_sizes");
+                    foreach ($sizes as $i=>$size) {
+                        if($size>50){
+                            break;
+                        }
+                    }
 
-                            <a href="#" onclick="ajaxPhotoEdition('<?php echo url_for('photo_ajax_default', $photo) ?>')" class="default"><img src="/sfMultipleAjaxUploadGalleryPlugin/images/starrize.png" align="left" title="Utiliser cette image comme photo de couverture" /></a>
-                            <a href="#" onclick="ajaxPhotoEdition('<?php echo url_for('photo_ajax_delete', $photo) ?>')" class="delete"><img src="/sfMultipleAjaxUploadGalleryPlugin/images/trash.png" align="left" title="Supprimer"/></a>
-                            <?php endif; ?>
-                          </div>
-                        </div>
-                        <?php endforeach; ?>
-                        <div class="clear"></div>
-                        <?php else: ?>
-                        <p>Aucune photo pour l'instant.</p>
-                        <?php endif; ?>
+                    if($photos->count() > 0){ ?>
+
+                    <table id="maintable">
+                            <tr>
+                                <td style="width: 20%">
+                                    <table class="mediumtable">
+                                            <tr>
+                                                <th rowspan="3"></th>
+                                                <th class="topleft"></th>
+                                                <td class="tbl-border-top">&nbsp;</td>
+                                                <th class="topright"></th>
+                                                <th rowspan="3"></th>
+                                            </tr>
+                                            <tr>
+                                            <td class="tbl-border-left"></td>
+                                            <td>
+                                                <div style="text-align: center">
+                                                    <img src="<?php echo sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture");?>"/>
+                                                    <h1><?php echo 'Edition de la photo'; ?></h1>
+                                                </div>
+                                                <div class="photo_action_full" style="height: 150px"><?php echo __("Cliquez sur la photo que vous désirez modifier")?></div>
+                                                <?php foreach( $photos as $i=>$photo ){
+                                                    include_partial("gallery/actions", array("photo"=>$photo,"contextual"=>false));
+                                                }?>
+                                            </td>
+                                            <td class="tbl-border-right"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bottomleft"></th>
+                                                <td class="tbl-border-bottom">&nbsp;</td>
+                                                <th class="bottomright"></th>
+                                            </tr>
+                                    </table>
+                                </td>
+                                <td id="photo_list">
+                                    <table class="mediumtable">
+                                            <tr>
+                                                <th rowspan="3"></th>
+                                                <th class="topleft"></th>
+                                                <td class="tbl-border-top">&nbsp;</td>
+                                                <th class="topright"></th>
+                                                <th rowspan="3"></th>
+                                            </tr>
+                                            <tr>
+                                            <td class="tbl-border-left"></td>
+                                            <td>
+                                                <ul id="photos-list">
+                                                    <?php foreach( $photos as $i=>$photo ){ ?>
+                                                        <li id="photo_elt_<?php echo $photo->getId()?>" class="photo-elt" style="float:left;list-style-type:none;min-width:100px;">
+                                                        <div id="photo-<?php echo $photo->getId()?>" class="picture" onclick="$('.photo_action_full').hide(); $('#actions_<?php echo $photo->getId() ?>').toggle('slow',  showActionFull); " onmouseover="$(this).find('.actions #contextual_actions_<?php echo $photo->getId() ?>').show();" onmouseout="$(this).find('.actions #contextual_actions_<?php echo $photo->getId() ?>').hide();">
+                                                            <?php if($photo->getIsDefault()){ ?> <div id="default" title="Cette photo est l'image utilisée pour la couverture de la galerie"></div><?php } ?>
+                                                            <img class="basic" x-image-id="<?php echo $photo->getPhotoId() ?>" src="<?php echo $photo->getFullPicpath($size); ?>"/>
+                                                          <div class="actions<?php echo $photo->getIsDefault()?" defaultPicture":"" ; ?>">
+                                                              <?php include_partial("gallery/actions", array("photo"=>$photo,"contextual"=>true)); ?>
+                                                          </div>
+                                                        </div>
+                                                            </li>
+                                                    <?php } ?>
+                                                </ul>
+                                            </td>
+                                            <td class="tbl-border-right"></td>
+                                            </tr>
+                                            <tr>
+                                                <th class="bottomleft"></th>
+                                                <td class="tbl-border-bottom">&nbsp;</td>
+                                                <th class="bottomright"></th>
+                                            </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    <?php }else{ ?>
+                    <p>Aucune photo pour l'instant.</p>
+                    <?php } ?>
                 </div>
                 <!--  end table-content  -->
 

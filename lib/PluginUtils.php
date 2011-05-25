@@ -60,5 +60,14 @@ class PluginUtils {
 
       echo javascript_tag($code);
     }
+
+    static public function gallery_path($gallery = '')
+    {
+        $uploadDir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
+        $webDir = sfConfig::get("sf_web_dir");
+        $upload_gallery_path = substr($uploadDir, strlen($webDir), strlen($uploadDir) - strlen($webDir));
+        $upload_gallery_path = str_replace( '\\', '/', $upload_gallery_path);
+        return $upload_gallery_path;
+    }
 }
 ?>

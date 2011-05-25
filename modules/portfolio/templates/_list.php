@@ -17,9 +17,12 @@
                     <?php 
                     $uploadDir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
                     $webDir = sfConfig::get("sf_web_dir");
-                    $correctPath = substr($uploadDir, strlen($webDir), strlen($uploadDir)-strlen($webDir)); ?>
-                	<img src="<?php echo $correctPath."/".$gallery->getId()."/".
-				sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_portfolio_thumbnails_size")."/".$gallery->getPhotoDefault()->getPicpath() ?>"/>
+                    $correctPath = substr($uploadDir, strlen($webDir), strlen($uploadDir)-strlen($webDir));
+                    $default = $gallery->getPhotoDefault()->getPicpath() == "" ? sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture") :
+                            $correctPath.$gallery->getSlug()."/".
+				sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_portfolio_thumbnails_size")."/".$gallery->getPhotoDefault()->getPicpath();
+                    ?>
+                	<img src="<?php echo $default ?>"/>
             	</a>
 	</div>
     </div>

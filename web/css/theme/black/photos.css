@@ -187,3 +187,28 @@ table.mediumtable{
     width:15px;
     height:15px;
 }
+
+#photos-list li .picture .actions a { padding: 0; background-image: none; }
+.photo-elt { position: relative; }
+
+#photos-list .contextual {
+    background-color: grey;
+    left: -20px;
+    opacity: 0.75;
+    position: absolute;
+    width: 175px;
+    z-index: 10001;
+    padding: 10px;
+}
+
+#photos-list .defaultPicture .contextual {
+    width: 145px;
+}
+
+#photos-list .contextual a{
+    float: left;
+    font-size: 16px;
+}
+#photos-list .contextual a img{
+    max-height: 16px;
+}

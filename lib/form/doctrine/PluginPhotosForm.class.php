@@ -20,12 +20,11 @@ abstract class PluginPhotosForm extends BasePhotosForm
                     'title' => 'Titre :',
                     'picpath' => 'Chemin <em>*</em>:',
         ));
-        $path_gallery = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
+        $path_gallery = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getObject()->getGalleryId()."/";
         $default_size = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_default_size");
-
         $this->widgetSchema['picpath'] = new sfWidgetFormInputFileEditable(array(
                         'label'     => 'Image :',
-                        'file_src'  => $path_gallery.$default_size.$this->getObject()->getPicpath(),
+                        'file_src'  => $this->getObject()->getFullPicpath($default_size),
                         'is_image'  => true,
                         'edit_mode' => !$this->isNew(),
                         'template'  => '<div>%file%<br />%input%<br />%delete% %delete_label%</div>',
@@ -33,7 +32,7 @@ abstract class PluginPhotosForm extends BasePhotosForm
 
 	$this->setValidator('picpath', new sfValidatorFile(array(
                               'required' => true,
-                              'path' => $path_gallery,
+                              'path' => $path_gallery."tmp/",
                               'mime_types' => 'web_images'
                         ), array(
                         )));

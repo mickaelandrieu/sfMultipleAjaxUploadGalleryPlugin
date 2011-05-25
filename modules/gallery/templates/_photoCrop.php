@@ -1,6 +1,5 @@
 <?php use_helper('I18N') ?>
 <link href="/sfMultipleAjaxUploadGalleryPlugin/css/jquery.Jcrop.css" media="screen" type="text/css" rel="stylesheet">
-<script src="/sfMultipleAjaxUploadGalleryPlugin/js/jquery/jquery-1.4.4.js"/>
 <script type="text/javascript">
     function ajaxForm(){
         $.post("<?php echo url_for(@photo_crop) ?>",
@@ -35,11 +34,7 @@
                 <tr>
                 <td class="tbl-border-left"></td>
                 <td style="text-align: center">
-                    <?php
-                    $uploadDir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery");
-                    $webDir = sfConfig::get("sf_web_dir");
-                    $upload_gallery_path = substr($uploadDir, strlen($webDir), strlen($uploadDir) - strlen($webDir)); ?>
-                    <img id="photo" onclick="crop(this)" src="<?php echo $upload_gallery_path . $photo->getGallery()->getSlug() . "/" . $photo->getPicpath(); ?>"/>
+                    <img id="photo" onclick="crop(this)" src="<?php echo $photo->getFullPicpath(); ?>"/>
                     <form onsubmit="return false;" method="post" action="" id="cropForm">
                             <input type="hidden" name="x" id="x" value="67">
                             <input type="hidden" name="y" id="y" value="45">

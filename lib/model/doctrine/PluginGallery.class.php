@@ -16,11 +16,11 @@ abstract class PluginGallery extends BaseGallery {
         parent::delete($conn);
         if(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_onDelete")== "cascade")
         {
-            $this->RemoveFolder(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getId().'/');
+            $this->RemoveFolder(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getSlug().'/');
         }
 
     }
-    
+
     public function RemoveFolder($dir){
         $handle = opendir($dir);
         while($elem = readdir($handle))
@@ -58,13 +58,13 @@ abstract class PluginGallery extends BaseGallery {
                 ->set('p.is_default', '?', false)
                 ->where('p.gallery_id = ?', $this->getId())
                 ->execute();
-        
+
         Doctrine_Query::create()
                 ->update('Photos p')
                 ->set('p.is_default', '?', true)
                 ->andWhere('p.id = ?', $photoId)
                 ->execute();
-        
+
         return true;
     }
 
@@ -77,8 +77,16 @@ abstract class PluginGallery extends BaseGallery {
         return $default;
     }
 
+    public function getPhotos(){
+        return Doctrine_Query::create()
+                ->from('Photos p')
+                ->where('p.gallery_id = ?', $this->getId())
+                ->orderBy('.order_photo ASC')
+                ->execute();
+    }
+
     public static function getAllGalleries(){
-        return Doctrine::getTable('gallery')->createQuery('a')->execute();
+        return Doctrine::getTable('gallery')->createQuery('g')->where('g.is_active = ?',true)->execute();
     }
     public static function getNbGalleries($nb = 0){
         return Doctrine_Query::create()->from('gallery')->orderBy('updated_at DESC')

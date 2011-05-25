@@ -14,6 +14,7 @@ abstract class PluginGalleryForm extends BaseGalleryForm
   {
         parent::setup();
         $this->removeFields();
+	$this->widgetSchema['description'] = new sfWidgetFormTextarea(array(),array('cols'=>'150','rows'=>8));
   }
 
     protected function removeFields() {

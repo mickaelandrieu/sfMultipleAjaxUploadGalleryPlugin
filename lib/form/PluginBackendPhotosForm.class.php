@@ -9,7 +9,6 @@ class PluginBackendPhotosForm extends PluginPhotosForm {
                 'title' => 'Titre :',
                 'gallery_id' => 'Galerie :',
         ));
-        $this->widgetSchema['picpath'] = new sfWidgetFormInputFile(array('label' => 'Image'));
 
     }
     protected function removeFields() {

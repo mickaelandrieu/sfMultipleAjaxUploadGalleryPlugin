@@ -10,7 +10,6 @@ generator:
     route_prefix:          photos
     with_doctrine_route:   true
     actions_base_class:    sfActions
-
     config:
       actions: ~
       fields:  ~
@@ -19,7 +18,25 @@ generator:
         layout: stacked
         display: [is_default,gallery,picpath]
         params:  |
-          %%is_default%% <small>%%gallery%%</small> %%title%% <img title="%%title%%" src="../uploads/gallery/thumbnail/50_%%picpath%%" style="max-height:50px"/>
+          %%is_default%% <small>%%gallery%%</small> %%title%% <img x-image-id="%%photo_id%%" title="%%title%%" src="%%full_picpath_default%%"/>
+        batch_actions:
+          _delete:  ~
+          rotate90:  ~
+          rotate180:  ~
+          rotate270:  ~
+          blackAndWhite:
+            label:  Black And White
+          flipH:
+            label:  Flip Horizontale
+          flipV:
+            label:  Flip Verticale
+          colorize:  ~
+          filigrane:  ~
+          brightness:  ~
+        object_actions:
+          _edit:  ~
+          _delete:  ~
+          cancelLastAction:  ~
       filter:
         display:
           [title,picpath]

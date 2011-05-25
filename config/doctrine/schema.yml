@@ -8,8 +8,8 @@ Gallery:
     title:
       type : string(255)
     description:
-      type : string(255)
-    dans_gallerie: boolean
+      type : string
+    is_active: boolean
 
 Photos:
   actAs:
@@ -24,6 +24,9 @@ Photos:
       type : string(255)
     gallery_id:
       type : integer(8)
+    order_photo:
+      type: integer(4)
+      default: null
     is_default:     { type: boolean, default: false }
   relations:
     Gallery:

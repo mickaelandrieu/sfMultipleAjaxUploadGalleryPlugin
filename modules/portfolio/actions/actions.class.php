@@ -12,9 +12,7 @@ class portfolioActions extends sfActions
 {
   public function executeIndex(sfWebRequest $request)
   {
-    $this->galleries = Doctrine::getTable('gallery')
-      ->createQuery('a')
-      ->execute();
+    $this->galleries = Gallery::getAllGalleries();
   }
 
   public function executeShow(sfWebRequest $request)

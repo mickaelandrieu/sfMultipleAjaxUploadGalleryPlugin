@@ -23,6 +23,106 @@ photo_ajax_delete:
   requirements:
     sf_method: [post]
 
+photo_ajax_crop:
+  url:     /photo/crop/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhotoCrop }
+  requirements:
+    sf_method: [post]
+
+photo_ajax_rotate_left:
+  url:     /photo/rotateLeft/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:rotate90}
+  requirements:
+    sf_method: [post]
+
+photo_ajax_brightness:
+  url:     /photo/brightness/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:brightness}
+  requirements:
+    sf_method: [post]
+
+photo_ajax_rotate_right:
+  url:     /photo/rotateRight/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:rotate270 }
+  requirements:
+    sf_method: [post]
+
+photo_ajax_flip_h:
+  url:     /photo/flip_horizontal/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:flip_h }
+  requirements:
+    sf_method: [post]
+
+photo_ajax_flip_v:
+  url:     /photo/flip_vertical/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:flip_v }
+  requirements:
+    sf_method: [post]
+
+photo_ajax_colorize:
+  url:     /photo/colorize/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:colorize}
+  requirements:
+    sf_method: [post]
+
+photo_ajax_choose_colorize:
+  url:     /photo/choose_colorize/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:choose_colorize }
+  requirements:
+    sf_method: [post]
+
+photo_ajax_black_and_white:
+  url:     /photo/black_and_white/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:black_and_white}
+  requirements:
+    sf_method: [post]
+
+photo_ajax_choose_filigrane:
+  url:     /photo/choose_filigrane/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:choose_filigrane}
+  requirements:
+    sf_method: [post]
+
+photo_ajax_filigrane:
+  url:     /photo/filigrane/:id
+  class:   sfDoctrineRoute
+  options: { model: Photos, type: object }
+  param:   { module: gallery, action: ajaxPhoto, type_action:filigrane}
+  requirements:
+    sf_method: [post]
+
+photo_crop:
+  url:     /photos/crop
+  param:   { module: photos, action: crop}
+  requirements:
+    sf_method: [post]
+
+photo_reback:
+  url:     /photos/reback
+  param:   { module: photos, action: reback}
+  requirements:
+    sf_method: [post]
+
 gallery_ajax_photo_liste:
   url:     /gallery/:id/list
   class:   sfDoctrineRoute
@@ -48,7 +148,7 @@ showGallery:
   url:      /portfolio/:slug
   class:    sfDoctrineRoute
   options:  { model: gallery, type: object }
-  param:    { module: portfolio, action: show }
+  param:    { module: slideshow, action: show }
 listPortfolio:
   url:      /portfolios
   class:    sfDoctrineRoute

@@ -29,14 +29,14 @@ generator:
       edit:
         title:             Modifier une galerie
         display:
-          "Galerie":       [id, title, description, dans_gallerie]
+          "Galerie":       [id, title, description, is_active]
           "Photos":        [_photoUpload]
         actions:
           _list: ~
           _delete: ~
           _save: ~
           _purge:
-            name: Vider la gallerie
+            name: Vider la galerie
             action: purge
       new:
         title:             Créer une galerie

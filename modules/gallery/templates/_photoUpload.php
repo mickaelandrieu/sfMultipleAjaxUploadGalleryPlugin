@@ -1,7 +1,9 @@
 <?php
+// jQuery FIX for jroller theme
 if(!in_array(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_theme"),array("jroller"))){
     use_javascript("../sfMultipleAjaxUploadGalleryPlugin/js/jquery/jquery-1.4.4.js");
 }?>
+<!-- WILL SHOW THE GALLERY'S PICTURE LIST -->
 <div id="pictures_list" class="sf_admin_form_row">
   <?php include_partial('gallery/photoListe', array('photos' => $form->getObject()->getPhotos())) ?>
 </div>
@@ -21,7 +23,10 @@ if(!in_array(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_theme"),array(
                 { gallery_id: <?php echo $form->getObject()->getId(); ?>},
             onComplete: function(id, file, responseJson){
                     $.post("<?php echo url_for(@gallery_ajax_photo_liste,$form->getObject()) ?>",
-                    {gallery_id: <?php echo $form->getObject()->getId(); ?>},
+                    {
+                        gallery_id: <?php echo $form->getObject()->getId(); ?>
+                    },
+
                     function(data)
                     {
                         $("#pictures_list").html(data);
@@ -33,7 +38,7 @@ if(!in_array(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_theme"),array(
             onSubmit: function(id, fileName){
                 },
             onProgress: function(id, fileName){
-                        $('#status').addClass("success");
+                    $('#status').addClass("success");
                     $('#status').addClass("loading");
                 }
             });
