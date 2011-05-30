@@ -1,9 +1,10 @@
-$(function() {
-    crop("#photo");
-});
-function crop(img){
-    $(img).Jcrop({
-        onSelect: updateCoords
+function crop(img, minWidth, maxWidth, minHeight, maxHeight, ratio){
+    jcrop_api = $.Jcrop(img);
+    jcrop_api.setOptions({
+        onSelect: updateCoords,
+        minSize: [ minWidth, minHeight ],
+        maxSize: [ maxWidth, maxHeight ],
+        aspectRatio: ratio
     });
     $('.jcrop-holder').css('margin','0 auto');
 }

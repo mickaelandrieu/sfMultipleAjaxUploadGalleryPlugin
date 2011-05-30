@@ -15,15 +15,15 @@ abstract class PluginPhotosForm extends BasePhotosForm
       {
         parent::setup();
         $this->removeFields();
-
+        $i18n = sfContext::getInstance()->getI18N();
         $this->widgetSchema->setLabels(array(
-                    'title' => 'Titre :',
-                    'picpath' => 'Chemin <em>*</em>:',
+                    'title' => $i18n->__("backend.photo.input.title.label", array(), "sfmaug").' :',
+                    'picpath' => $i18n->__("backend.photo.input.path.label", array(), "sfmaug").' <em>*</em>:',
         ));
         $path_gallery = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getObject()->getGalleryId()."/";
         $default_size = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_default_size");
         $this->widgetSchema['picpath'] = new sfWidgetFormInputFileEditable(array(
-                        'label'     => 'Image :',
+                        'label'     => $i18n->__("backend.photo.input.path.label", array(), "sfmaug").' :',
                         'file_src'  => $this->getObject()->getFullPicpath($default_size),
                         'is_image'  => true,
                         'edit_mode' => !$this->isNew(),

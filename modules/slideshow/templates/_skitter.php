@@ -4,7 +4,7 @@
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/skitter/js/jquery.skitter.min.js");?>
 
 <?php
-$correctPath = PluginUtils::gallery_path();
+$correctPath = SfMaugUtils::gallery_path();
 ?>
 
 <div class="box_skitter box_skitter_large">

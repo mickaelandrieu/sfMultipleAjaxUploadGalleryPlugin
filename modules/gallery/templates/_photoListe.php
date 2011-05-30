@@ -1,14 +1,6 @@
-<?php use_stylesheet("../sfMultipleAjaxUploadGalleryPlugin/css/theme/".sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_csstheme")."/photos.css") ?>
 <?php use_helper('I18N') ?>
-<?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/js/jquery/jquery-ui-1.8.10.custom.min.js") ?>
 <?php use_javascript("http://github.com/malsup/blockui/raw/master/jquery.blockUI.js?v2.31") ?>
-<?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/js/jscolor.js") ?>
 
-<?php
-    $app_name = $sf_context->getConfiguration()->getApplication();
-    if(strcmp($sf_context->getConfiguration()->getEnvironment(),'prod') != 0)
-    {$app_name .= '_'.$sf_context->getConfiguration()->getEnvironment();}
-?>
 <style type="text/css">
         fieldset.optdual { width: 500px; }
         .optdual { position: relative; }
@@ -34,7 +26,7 @@ function showActionFull() {;
     function saveTitle(id){
         var title = $('#' + id + '_value').val();
         $.blockUI({ message: '<br/><h1><?php echo __('Please wait...') ?></h1><br/><img src="/sfMultipleAjaxUploadGalleryPlugin/images/loadingAnimation.gif" alt=""/><br/>' });
-        $.post('/<?php echo $app_name ?>.php/photos/updateTitle',
+        $.post('<?php echo url_for(@photoUpdateTitle) ?>',
             {id: id, title : title},
             function(data){
                 $('#sf_admin_container').prepend("<div class='notice'>"+data+"</div>");
@@ -79,7 +71,7 @@ function showActionFull() {;
                             update: function(){
                                     $('#working').show();
                                     var order = $('#photos-list').sortable('serialize');
-                                    $.post('/<?php echo $app_name ?>.php/gallery/ajaxPhotoOrder?id=<?php echo $photos->getFirst()->getGallery()->getId()?>&'+order,
+                                    $.post('<?php echo url_for(@ajaxPhotoOrder) ?>?id=<?php echo $photos->getFirst()->getGalleryId()?>&'+order,
                                             {},
                                             function(data){
                                                     $("#pictures_list").html(data);
@@ -141,9 +133,9 @@ function showActionFull() {;
                                             <td>
                                                 <div style="text-align: center">
                                                     <img src="<?php echo sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture");?>"/>
-                                                    <h1><?php echo 'Edition de la photo'; ?></h1>
+                                                    <h1><?php echo __("backend.action.edit.title",array(),"sfmaug"); ?></h1>
                                                 </div>
-                                                <div class="photo_action_full" style="height: 150px"><?php echo __("Cliquez sur la photo que vous désirez modifier")?></div>
+                                                <div class="photo_action_full" style="height: 150px"><?php echo __("backend.action.edit.help",array(),"sfmaug")?></div>
                                                 <?php foreach( $photos as $i=>$photo ){
                                                     include_partial("gallery/actions", array("photo"=>$photo,"contextual"=>false));
                                                 }?>
@@ -195,7 +187,7 @@ function showActionFull() {;
                             </tr>
                         </table>
                     <?php }else{ ?>
-                    <p>Aucune photo pour l'instant.</p>
+                    <p><?php echo __("backend.gallery.nophotos",array(),"sfmaug") ?></p>
                     <?php } ?>
                 </div>
                 <!--  end table-content  -->

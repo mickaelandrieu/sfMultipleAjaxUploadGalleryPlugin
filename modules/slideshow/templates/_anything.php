@@ -7,7 +7,7 @@
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/anything/js/jquery.easing.1.2.js");?>
 
 <?php
-    $correctPath = PluginUtils::gallery_path();
+    $correctPath = SfMaugUtils::gallery_path();
 ?>
 
 <ul id="slider1">

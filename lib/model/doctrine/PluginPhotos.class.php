@@ -22,7 +22,7 @@ abstract class PluginPhotos extends BasePhotos
     }
     public function getFullPicpath($size = false)
     {
-        $path = PluginUtils::gallery_path().$this->getGallery()->getSlug()."/";
+        $path = SfMaugUtils::gallery_path().$this->getGallery()->getSlug()."/";
         if ($size) {
             $path .= $size."/";
         }
@@ -80,6 +80,7 @@ abstract class PluginPhotos extends BasePhotos
                 $dir = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug().'/'.$size;
                 if (!is_dir($dir)) {
                     mkdir ($dir);
+                    chmod($dir,SfMaugUtils::getChmodValue("drwxrwxrwx"));
                 }
                 $img->saveAs($dir.'/'.$this->getPicpath(), 'image/'.$this->getExtension());
             }
@@ -312,6 +313,13 @@ abstract class PluginPhotos extends BasePhotos
             }
         }
         return $path;
+    }
+
+    public function  getGallery() {
+        return Doctrine_Query::create()
+                ->from('Gallery g')
+//                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+                ->where('g.id = ?',$this->getGalleryId())->fetchOne();
     }
 
 }

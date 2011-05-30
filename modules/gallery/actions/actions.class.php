@@ -13,35 +13,36 @@ require_once dirname(__FILE__) . '/../lib/galleryGeneratorHelper.class.php';
  */
 class galleryActions extends autoGalleryActions {
 
-    public function executeUpload(sfWebRequest $request)
-    {
-        $this->gallery = Doctrine::getTable("gallery")->find($request->getParameter("gallery_id"));
+    public function executeUpload(sfWebRequest $request) {
+        $this->gallery = Doctrine::getTable("Gallery")->find($request->getParameter("gallery_id"));
         $this->forward404unless($this->gallery);
 
         // list of valid extensions, ex. array("jpeg", "xml", "bmp")
-        $allowedExtensions = array("jpeg","png","gif","bmp","jpg");
+        $allowedExtensions = array("jpeg", "png", "gif", "bmp", "jpg");
         // max file size in bytes
         $sizeLimit = 6 * 1024 * 1024;
 
         $uploader = new qqFileUploader($allowedExtensions, $sizeLimit);
 
-        if(!is_dir(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->gallery->getSlug()."/"))
-        {
+        if (!is_dir(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . $this->gallery->getSlug() . "/")) {
             mkdir(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery"));
-            mkdir(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->gallery->getSlug()."/");
+            chmod(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery"),  SfMaugUtils::getChmodValue("drwxrwxrwx"));
+            mkdir(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . $this->gallery->getSlug() . "/");
+            chmod(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . $this->gallery->getSlug() . "/",SfMaugUtils::getChmodValue("drwxrwxrwx"));
         }
 
-        $result = $uploader->handleUpload(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->gallery->getSlug()."/");
+        $result = $uploader->handleUpload(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . $this->gallery->getSlug() . "/");
 
         $file = $request->getParameter("qqfile");
-        if($file=="") $file=$_FILES['qqfile']['name'];
-        if(isset($result["success"])){
+        if ($file == "")
+            $file = $_FILES['qqfile']['name'];
+        if (isset($result["success"])) {
             $photo = new Photos();
             $photo->setGalleryId($this->gallery->getId());
             $photo->setPicPath($file);
             $photo->setIsDefault(($this->gallery->getPhotos()->count() > 0) ? false : true);
             $photo->setTitle("");
-            $photo->setSlug(PluginUtils::slugify($file).time());
+            $photo->setSlug(SfMaugUtils::slugify($file) . time());
             if ($photo->save()) {
                 $ok = 'success';
             }else{

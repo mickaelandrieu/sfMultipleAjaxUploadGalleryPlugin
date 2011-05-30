@@ -135,6 +135,14 @@ gallery_upload:
   url:     /gallery/upload
   param:   { module: gallery, action: upload}
 
+ajaxPhotoOrder:
+  url:     /gallery/ajaxPhotoOrder/*
+  param:   { module: gallery, action: ajaxPhotoOrder}
+
+photoUpdateTitle:
+  url:     /photos/updateTitle/*
+  param:   { module: photos, action: updateTitle}
+
 photos:
   class: sfDoctrineRouteCollection
   options:

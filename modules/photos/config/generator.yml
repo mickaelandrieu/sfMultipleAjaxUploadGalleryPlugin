@@ -38,8 +38,7 @@ generator:
           _delete:  ~
           cancelLastAction:  ~
       filter:
-        display:
-          [title,picpath]
+        class: false
       form:
         class : PluginBackendPhotosForm
       edit:    ~

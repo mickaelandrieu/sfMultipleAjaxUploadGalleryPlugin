@@ -25,3 +25,13 @@ all:
     csstheme: black #black or original
     defaultPicture: /sfMultipleAjaxUploadGalleryPlugin/images/default_picture.png
     path_filigrane: <?php echo sfConfig::get("sf_upload_dir")."/filigrane.png\n"; ?>
+    ratio:
+      enable: true
+      value: 1.5
+    dimensions:
+      min:
+        width: 0
+        height: 0
+      max:
+        width: 615
+        height: 400

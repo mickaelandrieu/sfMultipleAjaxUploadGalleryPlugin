@@ -15,9 +15,8 @@
         <div>
 		<a href="<?php echo url_for(@showGallery, $gallery) ?>">
                     <?php 
-                    $correctPath = PluginUtils::gallery_path();
-        
-                    $default = $gallery->getPhotoDefault()->getPicpath() == "" ? sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture") :
+                    $correctPath = SfMaugUtils::gallery_path();
+					$default = $gallery->getPhotoDefault()->getPicpath() == "" ? sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture") :
                             $correctPath.$gallery->getSlug()."/".
 				sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_portfolio_thumbnails_size")."/".$gallery->getPhotoDefault()->getPicpath();
                     ?>

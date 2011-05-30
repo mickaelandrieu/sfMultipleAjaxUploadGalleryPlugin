@@ -65,5 +65,13 @@
     </tr>
 </table>
 
+<?php $ratio = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_ratio"); ?>
+<?php $dimensions = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_dimensions"); ?>
 <script type="text/javascript" src="/sfMultipleAjaxUploadGalleryPlugin/js/jquery.Jcrop.js" />
 <script type="text/javascript" src="/sfMultipleAjaxUploadGalleryPlugin/js/jcrop-script.js" />
+<script type="text/javascript">
+    $(function() {
+        crop("#photo",<?php echo $dimensions["min"]["width"]; ?>,<?php echo $dimensions["max"]["width"]; ?>,<?php echo $dimensions["min"]["height"]; ?>,<?php echo $dimensions["max"]["height"]; ?>,<?php echo $ratio["enable"]? "'".$ratio["value"]."'": 0; ?>);
+    });
+</script>
+

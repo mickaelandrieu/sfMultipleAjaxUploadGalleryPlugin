@@ -48,7 +48,7 @@
     <ul class="thumbs noscript">
 
         <?php
-        $correctPath = PluginUtils::gallery_path();
+        $correctPath = SfMaugUtils::gallery_path();
         ?>
         <?php foreach ($gallery->getPhotos() as $photo) {
  ?>

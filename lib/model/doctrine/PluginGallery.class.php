@@ -10,13 +10,17 @@
  * @author     leny
  * @version    SVN: $Id: Builder.php 6820 2009-11-30 17:27:49Z jwage $
  */
+DEFINE("UPLOAD_DIR", sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery"));
+DEFINE("WEB_DIR", sfConfig::get("sf_web_dir"));
+DEFINE("CORRECT_PATH", substr(UPLOAD_DIR, strlen(WEB_DIR), strlen(UPLOAD_DIR) - strlen(WEB_DIR)));
+
 abstract class PluginGallery extends BaseGallery {
 
     public function save(Doctrine_Connection $conn = null) {
         if(!$this->isNew()){
             $oldSlug = Doctrine::getTable("Gallery")->find($this->getId())->getSlug();
             rename(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . $oldSlug . '/',
-                    sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . PluginUtils::slugify($this->getTitle()) . '/');
+                    sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery") . SfMaugUtils::slugify($this->getTitle()) . '/');
         }
         parent::save($conn);
     }
@@ -27,7 +31,6 @@ abstract class PluginGallery extends BaseGallery {
         {
             $this->RemoveFolder(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getSlug().'/');
         }
-
     }
 
     public function RemoveFolder($dir){
@@ -79,14 +82,16 @@ abstract class PluginGallery extends BaseGallery {
 
     public function getPhotoDefault() {
         $default = Doctrine::getTable('Photos')->getDefault($this->getId());
-        if(!$default instanceof Photos ){
+        if (!$default instanceof Photos) {
             $default = new Photos();
-            $default->setPicpath('PIC_0089.JPG');
         }
-        return $default;
+
+        return $default->getPicpath() == "" ?
+                sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture") :
+                CORRECT_PATH . $this->getSlug() . "/" . sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_portfolio_thumbnails_size") . "/" . $default->getPicpath();
     }
 
-    public function getPhotos(){
+    public function getPhotos() {
         return Doctrine_Query::create()
                 ->from('Photos p')
                 ->where('p.gallery_id = ?', $this->getId())
@@ -94,12 +99,30 @@ abstract class PluginGallery extends BaseGallery {
                 ->execute();
     }
 
-    public static function getAllGalleries(){
-        return Doctrine::getTable('gallery')->createQuery('g')->where('g.is_active = ?',true)->execute();
+    public static function getAllGalleries() {
+        return Doctrine::getTable('Gallery')->createQuery('g')
+                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+                ->where('g.is_active = ?', true)->execute();
     }
-    public static function getNbGalleries($nb = 0){
-        return Doctrine_Query::create()->from('gallery')->orderBy('updated_at DESC')
-        ->limit($nb)
-        ->execute();
+
+    public static function getGalleriesPager($limit) {
+        $query = Doctrine::getTable('Gallery')->createQuery('g')
+                        ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+                        ->where('g.is_active = ?', true);
+        $pager = new sfDoctrinePager('Gallery', $limit);
+        $pager->setQuery($query);
+        $pager->setPage(sfContext::getInstance()->getRequest()->getParameter('page', 1));
+        $pager->init();
+
+        return $pager;
     }
+
+    public static function getNbGalleries($nb = 0) {
+        return Doctrine_Query::create()
+                ->from('Gallery')->orderBy('updated_at DESC')
+                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+                ->limit($nb)
+                ->execute();
+    }
+
 }
