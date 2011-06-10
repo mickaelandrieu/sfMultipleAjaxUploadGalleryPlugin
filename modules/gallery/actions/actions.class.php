@@ -198,16 +198,22 @@ class galleryActions extends autoGalleryActions {
             $photo = $this->getRoute()->getObject();
             $gallery = $photo->getGallery();
             $method = $request->getParameter("type_action");
+            $message ="";
             switch ($method) {
                 case "rotate90": $photo->rotate(90);
+                $message = "";
                 break;
                 case "rotate270": $photo->rotate(270);
+                $message = "";
                 break;
                 case "flip_h": $photo->flip();
+                $message = "";
                 break;
                 case "flip_v": $photo->flipV();
+                $message = "";
                 break;
                 case "brightness": $photo->brightness(100);
+                $message = "";
                 break;
                 case "choose_colorize":
                     $onclick = 'picker.fromString(this.value)';
@@ -223,6 +229,7 @@ class galleryActions extends autoGalleryActions {
                     $params = $request->getParameter('colorize');
                     $color = Photos::rgb2hex2rgb($params['color']);
                     $photo->colorize($color['red'], $color['green'], $color['blue']);
+                    $message = "";
                 break;
                 case "choose_filigrane":
                     $this->form = new PluginBackendPhotosFiligraneForm();
@@ -234,12 +241,23 @@ class galleryActions extends autoGalleryActions {
                 case "filigrane" :
                     $params = $request->getParameter('filigrane');
                     $photo->overlay($params['position']);
+                    $message = "";
                 break;
 
                 case "black_and_white": $photo->greyScale();
+                    $message = "";
                 break;
             }
-            return $this->renderPartial('gallery/photoListe', array('photos'=> $gallery->getPhotos()));
+            $sizes = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_thumbnails_sizes");
+            foreach ($sizes as $i=>$size) {
+                if($size>150){
+                    $size = $sizes[$i-1];
+                    break;
+                }
+            }
+            $photo = Doctrine_Core::getTable('Photos')->findOneBy('id', $request->getParameter('id'));
+            return$this->renderText('id;;'.$request->getParameter('id').';;'.$message.';;'.$photo->getFullPicPath($size));
+            //return $this->renderPartial('gallery/photoListe', array('photos'=> $gallery->getPhotos()));
         }
         else {
             $this->redirect404();

@@ -156,7 +156,6 @@ abstract class PluginPhotos extends BasePhotos
         $picpath = $uploadDir.$this->getGallery()->getSlug()."/".$this->getPicpath();
         $ok = $img->saveAs($picpath, 'image/'.$this->getExtension());
         if ($ok) {
-            $this->create_thumbnails();
             $this->save();
         }
         return $ok;
@@ -289,7 +288,6 @@ abstract class PluginPhotos extends BasePhotos
         $picpath = sfConfig::get('sf_web_dir').DIRECTORY_SEPARATOR.$this->getFullPicpath();
         $ok = $img->saveAs($picpath, 'image/'.$this->getExtension());
         if($ok) {
-            $this->create_thumbnails();
             $this->save();
         }
         return $ok;

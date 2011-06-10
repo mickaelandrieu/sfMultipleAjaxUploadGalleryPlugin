@@ -30,7 +30,7 @@ foreach ($sizes as $i=>$size) {
 
 <?php if(!$contextual){ ?>
 <div style="margin-right: 5px">
-    <img src="<?php echo $photo->getFullPicpath($size); ?>"/>
+    <img src="<?php echo $photo->getFullPicpath($size); ?>" x-image-id="<?php echo $photo->getId() ?>"/>
 </div>
 <div class="clear"></div>
 <p><?php echo __("backend.gallery.photo.description.invite",array(),"sfmaug") ?></p>

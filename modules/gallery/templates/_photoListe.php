@@ -51,9 +51,14 @@ function showActionFull() {;
                          });
                     $('.blockOverlay').attr('title','Click to unblock').click($.unblockUI);
                 } else {
-                    $("#pictures_list").html(data);
-                    $.growlUI('Success Notification', 'Success Operation');
-                    
+                    if (elem.length > 1 && elem[0] == 'id') {
+
+                        $('img[x-image-id="'+elem[1]+'"]').attr('src',elem[3]);
+                        $.growlUI('Success Notification', elem[2]);
+                    } else {
+                        $("#pictures_list").html(data);
+                        $.growlUI('Success Notification', 'Success Operation');
+                    }
                 }
        });
         /*

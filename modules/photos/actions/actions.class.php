@@ -93,7 +93,7 @@ class photosActions extends autoPhotosActions
             $photo = Doctrine::getTable('photos')->find($id);
             $photo->setTitle($title);
             $photo->update();
-            return $this->renderText('La photo a bien été modifiée !');
+            return $this->renderText('La photo a bien été modifié !');
         }
     }
 
@@ -169,42 +169,42 @@ class photosActions extends autoPhotosActions
     public function executeFiligrane(sfWebRequest $request)
     {
         $params = $request->getParameter('filigrane');
-        return $this->batchMethod($request, 'Les photos ont bien intégrées le filigrane', 'overlay', $params['position']);
+        return $this->batchMethod($request, 'Filigrane réussie avec succès', 'overlay', $params['position']);
     }
 
     public function executeBatchRotate90(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été tournés de 90°', 'rotate', 90);
+        return $this->batchMethod($request, 'Rotation de 90° réussie avec succès', 'rotate', 90);
     }
 
     public function executeBatchRotate180(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été tournés de 180°', 'rotate', 180);
+        return $this->batchMethod($request, 'Rotation de 180° réussie avec succès', 'rotate', 180);
     }
 
     public function executeBatchRotate270(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été tournés de 270°', 'rotate', 270);
+        return $this->batchMethod($request, 'Rotation de 270° réussie avec succès', 'rotate', 270);
     }
 
     public function executeBatchBlackAndWhite(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été retouchés en noir et blanc', 'greyScale');
+        return $this->batchMethod($request, 'Retouche en noir et blanc réussie avec succès', 'greyScale');
     }
 
     public function executeBatchFlipH(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été retouchés en noir et blanc', 'flip');
+        return $this->batchMethod($request, 'Symétrie horizontale réussie avec succès', 'flip');
     }
 
     public function executeBatchFlipV(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été retouchés en noir et blanc', 'flipV');
+        return $this->batchMethod($request, 'Symétrie verticale réussie avec succès', 'flipV');
     }
 
     public function executeBatchBrightness(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été retouchés en noir et blanc', 'brightness', 100);
+        return $this->batchMethod($request, 'Eclaircissement réussie avec succès', 'brightness', 100);
     }
 
     public function executeListCancelLastAction(sfWebRequest $request)
@@ -237,7 +237,7 @@ class photosActions extends autoPhotosActions
 
     public function executeBatchSepia(sfWebRequest $request)
     {
-        return $this->batchMethod($request, 'Les photos ont bien été retouchés en noir et blanc', 'colorize', 112, 66, 20);
+        return $this->batchMethod($request, 'Colorisation Sepia réussie avec succès', 'colorize', 112, 66, 20);
     }
 
     public function executeBatchColorize(sfWebRequest $request)
@@ -255,7 +255,7 @@ class photosActions extends autoPhotosActions
     {
         $params = $request->getParameter('colorize');
         $color = Photos::rgb2hex2rgb($params['color']);
-        return $this->batchMethod($request, 'Les photos ont bien intégrées le filigrane', 'colorize', $color['red'], $color['green'], $color['blue']);
+        return $this->batchMethod($request, 'Colorisation générique réussie avec succès', 'colorize', $color['red'], $color['green'], $color['blue']);
     }
 
     public function executeReback(sfWebRequest $request)
