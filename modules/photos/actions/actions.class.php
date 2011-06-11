@@ -105,13 +105,13 @@ class photosActions extends autoPhotosActions
             foreach ($request->getPostParameters() as $key => $value) {
                 $values[] = $value;
             }
-            list($left,$top,$width,$height,$photo_id) = $values;
+            list($left,$top,$width,$height,$photo_id,$displayRatio) = $values;
             $photo = Doctrine::getTable('Photos')->find($photo_id);
             $gallery = Doctrine::getTable('gallery')->find($photo->getGalleryId());
             if(!$photo instanceof  Photos) $photo = new Photos();
             $quality = 100;
 
-            $ok = $photo->crop($left, $top, $width, $height, $quality);
+            $ok = $photo->crop($left*$displayRatio, $top*$displayRatio, $width*$displayRatio, $height*$displayRatio, $quality);
 
            $message = $ok==true? "La photo a bien été réduite":"Erreur dans la modification de la photo";
 

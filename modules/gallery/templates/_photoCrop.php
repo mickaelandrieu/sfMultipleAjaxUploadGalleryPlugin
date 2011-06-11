@@ -3,7 +3,7 @@
 <script type="text/javascript">
     function ajaxForm(){
         $.post("<?php echo url_for(@photo_crop) ?>",
-            {x:$("#x").val(),y:$("#y").val(),w:$("#w").val(),h:$("#h").val(),photo_id:$("#photo_id").val()},
+            {x:$("#x").val(),y:$("#y").val(),w:$("#w").val(),h:$("#h").val(),photo_id:$("#photo_id").val(),displayRatio:$("#displayRatio").val()},
             function(data){
                 $("#pictures_list").html(data);
             });
@@ -34,8 +34,9 @@
                 <tr>
                 <td class="tbl-border-left"></td>
                 <td style="text-align: center">
-                    <img id="photo" onclick="crop(this)" src="<?php echo $photo->getFullPicpath(); ?>"/>
+                    <img id="photo" width="<?php echo $originalWidth/$displayRatio; ?>" height="<?php echo $originalHeight/$displayRatio; ?>" src="<?php echo $photo->getFullPicpath(); ?>"/>
                     <form onsubmit="return false;" method="post" action="" id="cropForm">
+                            <input type="hidden" name="displayRatio" id="displayRatio" value="<?php echo $displayRatio ?>">
                             <input type="hidden" name="x" id="x" value="67">
                             <input type="hidden" name="y" id="y" value="45">
                             <input type="hidden" name="w" id="w" value="186">

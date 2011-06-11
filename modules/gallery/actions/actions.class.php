@@ -132,7 +132,11 @@ class galleryActions extends autoGalleryActions {
     {
         if ($request->isXmlHttpRequest()) {
             $photo = $this->getRoute()->getObject();
-            return $this->renderPartial('gallery/photoCrop', array('photo'=> $photo));
+            $sizes = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_thumbnails_sizes");
+            arsort($sizes,SORT_DESC);
+            $img = new sfImage(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$photo->getGallery()->getSlug().'/'.$photo->getPicpath(), 'image/'.$photo->getExtension());
+            
+            return $this->renderPartial('gallery/photoCrop', array('photo'=> $photo,"originalHeight"=>$img->getHeight(),"originalWidth"=>$img->getWidth(),"displayRatio"=>$img->getHeight()/array_shift($sizes)<1?1:$img->getHeight()/array_shift($sizes)));
         }
         else {
             $this->redirect404();
