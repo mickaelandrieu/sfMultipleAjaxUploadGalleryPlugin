@@ -54,7 +54,7 @@ abstract class PluginPhotos extends BasePhotos
             copy (
                     sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery")."tmp/".$filename,
                     sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug()."/".$filename );
-//            unlink(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery")."tmp/".$filename);
+                chmod(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug()."/".$filename,SfMaugUtils::getChmodValue("drwxrwxrwx"));
         }
 
         $this->create_thumbnails();
@@ -83,6 +83,7 @@ abstract class PluginPhotos extends BasePhotos
                     chmod($dir,SfMaugUtils::getChmodValue("drwxrwxrwx"));
                 }
                 $img->saveAs($dir.'/'.$this->getPicpath(), 'image/'.$this->getExtension());
+                chmod($dir.'/'.$this->getPicpath(),SfMaugUtils::getChmodValue("drwxrwxrwx"));
             }
         }
     }

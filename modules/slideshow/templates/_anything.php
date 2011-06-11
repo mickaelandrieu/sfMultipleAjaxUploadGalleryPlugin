@@ -14,7 +14,7 @@
         <?php foreach ($gallery->getPhotos() as $photo) { ?>
             <li>
                 <a name="<?php echo $photo->getTitle() ?>" href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
-                    <img src="<?php echo $correctPath.$gallery->getSlug()."/450/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
+                    <img src="<?php echo $correctPath.$gallery->getSlug()."/".SfMaugUtils::getMaxSize()."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
                 </a>
                             <?php echo $photo->getTitle() ?>
                 </div>

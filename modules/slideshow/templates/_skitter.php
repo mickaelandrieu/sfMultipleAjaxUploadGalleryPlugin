@@ -12,7 +12,7 @@ $correctPath = SfMaugUtils::gallery_path();
         <?php foreach ($gallery->getPhotos() as $photo) { ?>
             <li>
                 <a class="block" name="<?php echo $photo->getTitle() ?>" href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
-                    <img src="<?php echo $correctPath.$gallery->getSlug()."/450/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
+                    <img src="<?php echo $correctPath.$gallery->getSlug()."/".SfMaugUtils::getMaxSize()."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
                 </a>
                 <div class="label_text">
                     <p>Texte : <?php echo $photo->getTitle() ?></p>

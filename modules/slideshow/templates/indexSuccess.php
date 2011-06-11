@@ -1,8 +1,9 @@
 <?php use_helper('I18N') ?>
-<?php include_component("slideshow","widget", array(
+<?php if($galleries->getFirst() instanceof Gallery){
+    include_component("slideshow","widget", array(
     "gallery"=> $galleries->getFirst(),
     "template" => "anything"
-)) ?>
+));} ?>
 
 
 <?php echo !count($galleries) ? __("slideshow.index.empty") : __("slideshow.index.title");?>
@@ -18,9 +19,8 @@
 		<a href="<?php echo url_for(@showGallery, $gallery) ?>">
                     <?php 
                     $correctPath = SfMaugUtils::gallery_path();
-                    $default = $gallery->getPhotoDefault()->getPicpath() == "" ? sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture") :
-                            $correctPath.$gallery->getSlug()."/".
-				sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_portfolio_thumbnails_size")."/".$gallery->getPhotoDefault()->getPicpath();
+                    $default = $gallery->getPhotoDefault() == "" ? sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_defaultPicture") :
+                            $gallery->getPhotoDefault();
                     ?>
                 	<img src="<?php echo $default ?>"/>
             	</a>

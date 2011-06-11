@@ -101,13 +101,13 @@ abstract class PluginGallery extends BaseGallery {
 
     public static function getAllGalleries() {
         return Doctrine::getTable('Gallery')->createQuery('g')
-                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+//                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
                 ->where('g.is_active = ?', true)->execute();
     }
 
     public static function getGalleriesPager($limit) {
         $query = Doctrine::getTable('Gallery')->createQuery('g')
-                        ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+//                        ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
                         ->where('g.is_active = ?', true);
         $pager = new sfDoctrinePager('Gallery', $limit);
         $pager->setQuery($query);
@@ -120,7 +120,7 @@ abstract class PluginGallery extends BaseGallery {
     public static function getNbGalleries($nb = 0) {
         return Doctrine_Query::create()
                 ->from('Gallery')->orderBy('updated_at DESC')
-                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
+//                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
                 ->limit($nb)
                 ->execute();
     }

@@ -108,5 +108,10 @@ class SfMaugUtils {
 
       return $mode;
     }
+
+    public static function getMaxSize() {
+        foreach (sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_thumbnails_sizes") as $size) {}
+        return $size;
+    }
 }
 ?>
