@@ -207,3 +207,12 @@ table.mediumtable{
 #photos-list .contextual a img{
     max-height: 16px;
 }
+
+.sfmaug-actions{
+    display: none;
+    border: 1px solid #cecece;
+    -webkit-border-radius:5px;
+    -moz-border-radius:5px;
+    border-radius:5px;
+    text-align: center;
+}

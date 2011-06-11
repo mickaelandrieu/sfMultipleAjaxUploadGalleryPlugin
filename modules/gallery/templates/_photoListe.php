@@ -137,7 +137,7 @@ function showActionFull() {;
                                                 </div>
                                                 <div class="photo_action_full" style="height: 150px"><?php echo __("backend.action.edit.help",array(),"sfmaug")?></div>
                                                 <?php foreach( $photos as $i=>$photo ){
-                                                    include_partial("gallery/actions", array("photo"=>$photo,"contextual"=>false));
+                                                    include_partial("gallery/actions", array("photo"=>$photo));
                                                 }?>
                                             </td>
                                             <td class="tbl-border-right"></td>
@@ -168,7 +168,7 @@ function showActionFull() {;
                                                             <?php if($photo->getIsDefault()){ ?> <div id="default" title="Cette photo est l'image utilisée pour la couverture de la galerie"></div><?php } ?>
                                                             <img class="basic" x-image-id="<?php echo $photo->getPhotoId() ?>" src="<?php echo $photo->getFullPicpath($size); ?>"/>
                                                           <div class="actions<?php echo $photo->getIsDefault()?" defaultPicture":"" ; ?>">
-                                                              <?php include_partial("gallery/actions", array("photo"=>$photo,"contextual"=>true)); ?>
+                                                              <?php include_partial("gallery/actionsContextual", array("photo"=>$photo)); ?>
                                                           </div>
                                                         </div>
                                                             </li>
