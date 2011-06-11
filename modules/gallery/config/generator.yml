@@ -1,3 +1,4 @@
+<?php $i18n = sfContext::getInstance()->getI18n();?>
 generator:
   class: sfDoctrineGenerator
   param:

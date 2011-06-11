@@ -1,13 +1,13 @@
 <?php include_partial('gallery/assets') ?>
-<?php include_partial('gallery/list_actions', array('helper' => $helper)) ?>
 
 <?php if($pager->count()){ ?>
 <link href="/galleryview/css/jquery.galleryview-3.0.css" media="screen" type="text/css" rel="stylesheet">
 
 
-<div class="smaugv">
+<div class="sf_admin smaugv">
+<?php include_partial('gallery/list_actions', array('helper' => $helper)) ?>
     <div id="smaugv-others">
-        <h2><em>BIXI</em> Galleries</h2>
+        <h2>Galleries</h2>
         <div>
             <div>
                 <ul>
