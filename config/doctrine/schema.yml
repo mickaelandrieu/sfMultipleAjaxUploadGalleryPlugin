@@ -10,6 +10,11 @@ Gallery:
     description:
       type : string
     is_active: boolean
+    private: 
+      type: boolean
+      default: false
+      comment: "True means that this gallery has been added by the widget"
+    
 
 Photos:
   actAs:
