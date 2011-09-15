@@ -152,7 +152,7 @@ photos:
     column:               id
     with_wildcard_routes: true
 ##################################################################
-			widget routes
+#			widget routes
 ##################################################################
 uploader_upload:
   url:   /uploader/upload

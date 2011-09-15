@@ -43,7 +43,7 @@ all:
       aggregate_entity_class_name: Gallery
       
       #Give the relation type of you file schema : can be enum, related_table or column
-	# default gallery plugin only has one related_table : photos
+      # default gallery plugin only has one related_table : photos
       relation_type: related_table
       
       #Give only this information if the relation_type is set to enum or related_table
