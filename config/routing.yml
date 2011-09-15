@@ -151,6 +151,19 @@ photos:
     prefix_path:          /photos
     column:               id
     with_wildcard_routes: true
+##################################################################
+			widget routes
+##################################################################
+uploader_upload:
+  url:   /uploader/upload
+  param: { module: uploader, action: upload}
+  requirements:
+    sf_method: [post]
+
+uploader_list:
+  url: /uploader/list
+  param: { module: uploader, action: list}
+
 #FRONTEND SIDE - portfolios
 showGallery:
   url:      /portfolio/:slug

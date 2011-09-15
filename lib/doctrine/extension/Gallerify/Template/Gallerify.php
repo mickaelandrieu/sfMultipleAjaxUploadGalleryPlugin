@@ -32,7 +32,7 @@ class Doctrine_Template_Gallerify extends Doctrine_Template {
     public function setUp()
     {
         $this->hasOne('Gallery as Gallery', array(
-                'local' => 'gallery_id',
+                'local' => $this->_options['gallery_id']['name'],
                 'foreign' => 'id'
             )
         );

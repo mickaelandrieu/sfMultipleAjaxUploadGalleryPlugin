@@ -27,6 +27,8 @@ Photos:
       type : string(255)
     picpath:
       type : string(255)
+    size:
+      type : string(255)
     gallery_id:
       type : integer(8)
     order_photo:

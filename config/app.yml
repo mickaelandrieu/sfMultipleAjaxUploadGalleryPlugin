@@ -35,3 +35,42 @@ all:
       max:
         width: 615
         height: 400
+
+  uploader:
+    #Define your file schema (that you will give in the widget call
+    default:
+      #The class the files are linked
+      aggregate_entity_class_name: Gallery
+      
+      #Give the relation type of you file schema : can be enum, related_table or column
+	# default gallery plugin only has one related_table : photos
+      relation_type: related_table
+      
+      #Give only this information if the relation_type is set to enum or related_table
+      entity_aggregate_columnid: gallery_id
+      photos_filename_column: picpath
+      photos_size_column: size
+
+      #If relation_type = enum, give here the different values
+      #else if relation_type = related_table, give here the different Doctrine Class names
+      #else if relation_type = column, give the columnames
+      entity_file_kinds:
+        - Photos
+      
+      #Set the limit foreach entity kind
+      photos_max_number: 10
+      photos_unit_max_weight: 1100000
+      photos_max_weight: 21000000
+      
+      global_max_weight: 20000000
+              
+      main_path: /uploads/gallery
+      min_file_size: 1 
+      max_file_size: 1000000000
+      
+      photos_allowed_extensions:
+        - jpg
+        - jpeg
+        - gif
+        - png
+        - bmp

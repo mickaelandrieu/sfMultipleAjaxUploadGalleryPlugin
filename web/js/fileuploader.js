@@ -488,13 +488,13 @@ qq.FileUploader = function(o){
              '</div>',
 
         // template for one item in file list
-        fileTemplate: '<li>' +
+        fileTemplate: '<div>' +
                 '<span class="qq-upload-file"></span>' +
                 '<span class="qq-upload-spinner"></span>' +
                 '<span class="qq-upload-size"></span>' +
                 '<a class="qq-upload-cancel" href="#">Cancel</a>' +
                 '<span class="qq-upload-failed-text">Failed</span>' +
-            '</li>',
+            '</div>',
 
         classes: {
             // used to get elements from templates
@@ -617,6 +617,11 @@ qq.extend(qq.FileUploader.prototype, {
         } else {
             qq.addClass(item, this._classes.fail);
         }
+        item.innerHTML = result.message;
+//        setTimeout(function() {
+//        item.innerHTML = "";
+//        }, 5000); 
+        
     },
     _addToList: function(id, fileName){
         var item = qq.toElement(this._options.fileTemplate);
