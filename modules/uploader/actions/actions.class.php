@@ -29,6 +29,7 @@ class UploaderActions extends sfActions {
     public function executeList(sfWebRequest $request){
         $this->parent_id = $request->getParameter("parent_id");
         $this->file_types = $request->getParameter("file_types");
+        $this->upload_config = $request->getParameter("upload_config");
     }
 
 }

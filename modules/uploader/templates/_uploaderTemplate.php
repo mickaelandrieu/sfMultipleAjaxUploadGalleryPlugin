@@ -1,5 +1,5 @@
 <div id="<?php echo $id ?>files_list" class="sf_admin_form_row">
-  <?php echo get_component('uploader','fileList', array('parent_id' => $parent_id,'file_types'=>$file_types)) ?>
+  <?php echo get_component('uploader','fileList', array('parent_id' => $parent_id,'file_types'=>$file_types, 'upload_config' => $upload_config)) ?>
 </div>
 
 <div id="<?php echo $id ?>" class="uploader-btn"><?php echo 'Ajouter des fichiers' ?></div>
@@ -15,12 +15,14 @@
             action: "<?php echo $upload_method ?>",
             params:
                 {
+                        upload_config: "<?php echo $upload_config; ?>",
                         parent_id: <?php echo $parent_id; ?>,
                         file_types: "<?php echo $file_types; ?>"
                 },
             onComplete: function(id, file, responseJson){
                     $.post("<?php echo $callback ?>",
                     {
+                        upload_config: "<?php echo $upload_config; ?>",
                         parent_id: <?php echo $parent_id; ?>,
                         file_types: "<?php echo $file_types; ?>"
                     },

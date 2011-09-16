@@ -16,7 +16,9 @@ class EMediaFactory {
             if(preg_match(${$type."regex"},strtolower($_GET["qqfile"]))){
                 //EImage, EAudio, EVideo, EDocument
                 $mediaClass = class_exists("E".ucfirst($type))?"E".ucfirst($type):"BaseEMedia";
-                $object = new $mediaClass($_GET["qqfile"],$config);
+                //entity type definition from the config
+                
+                $object = new $mediaClass(ucfirst($type),$_GET["qqfile"],$config);
             }
         }
         

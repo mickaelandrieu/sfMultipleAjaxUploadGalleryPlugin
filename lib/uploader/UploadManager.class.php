@@ -8,17 +8,20 @@ class UploadManager {
     private $errors = array();
 
     function __construct($upload_config) {
-        $this->upload_config = sfConfig::get($upload_config);
+        $fullConfig = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_uploader");
+        $this->upload_config = $fullConfig[$upload_config];
     }
 
-    public function bind($file_types=array()) {
+    public function bind($file_types) {
 
         /* Récupérer le fichier à uploader et créer un media object du bon type */
         //Get the allowed extensions
         
         //expect one or several of the files you set in app config file
+        
+        if($file_types[0] == "all") $file_types = $this->upload_config['entity_file_kinds'];
         foreach($file_types as $file_type){
-            $mimesExtensions[strtolower($mime_type)] = $this->upload_config[strtolower($file_type)."_allowed_extensions"];
+            $mimesExtensions[strtolower($file_type)] = $this->upload_config[strtolower($file_type)."_allowed_extensions"];
         }
         $this->mediaObject = EMediaFactory::getMediaObject($mimesExtensions,$this->upload_config);
         if (!$this->mediaObject) {
@@ -43,7 +46,7 @@ class UploadManager {
                 if(is_array($response)){
                     $this->errors[] = implode(", ",$response);
                 }else{
-                    $entity->$this->config[$this->type."_filename_column"]($response);
+                    $entity->{"set".$this->upload_config[strtolower($this->mediaObject->getType())."_filename_column"]}($response);
                     $entity->save();
                 }
             }else{

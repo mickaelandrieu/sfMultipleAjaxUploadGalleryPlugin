@@ -22,11 +22,15 @@ abstract class PluginPhotos extends BasePhotos
     }
     public function getFullPicpath($size = false)
     {
-        $path = SfMaugUtils::gallery_path().$this->getGallery()->getSlug()."/";
+        $path = $this->getPath();
         if ($size) {
             $path .= $size."/";
         }
         return $path.$this->getPicpath();
+    }
+    public function getPath()
+    {
+        return $path = SfMaugUtils::gallery_path().$this->getGallery()->getSlug()."/";
     }
 
     public function getPhotoId()
@@ -57,6 +61,7 @@ abstract class PluginPhotos extends BasePhotos
                 chmod(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug()."/".$filename,SfMaugUtils::getChmodValue("drwxrwxrwx"));
         }
 
+        if(file_exists($this->getFullPicpath()))
         $this->create_thumbnails();
     }
 

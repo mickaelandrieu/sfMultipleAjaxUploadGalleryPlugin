@@ -40,7 +40,7 @@ class qqUploadedFileXhr {
         if (isset($_SERVER["CONTENT_LENGTH"])){
             return (int)$_SERVER["CONTENT_LENGTH"];
         } else {
-            throw new Exception(__('La taille du contenu est trop grande'));
+            throw new Exception('La taille du contenu est trop grande');
         }
     }
 }

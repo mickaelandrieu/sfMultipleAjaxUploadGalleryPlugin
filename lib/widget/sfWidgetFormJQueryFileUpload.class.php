@@ -37,7 +37,7 @@ class sfWidgetFormMAUGFileUpload extends sfWidgetFormInput {
         $this->addOption('file_types', null);
         $this->addOption('help_message_1',null);
         $this->addOption('help_message_2',null);
-        $this->addOption('parent_id', null);
+        $this->addRequiredOption('parent_id');
         $this->addOption('button_label', "Upload");
         $this->addOption('uploaderTemplate', 'uploader/uploaderTemplate');
         $this->addOption('btn_template',"uploader/uploaderButtonTemplate");
@@ -51,8 +51,7 @@ class sfWidgetFormMAUGFileUpload extends sfWidgetFormInput {
 
     public function getJavaScripts() {
         return array(
-            "/sfMultipleAjaxUploadGalleryPlugin/js/fileuploader.js",
-//                    "/sfMultipleAjaxUploadGalleryPlugin/js/jquery.min.js",
+            "/sfMultipleAjaxUploadGalleryPlugin/js/fileuploader.js"
         );
     }
 
@@ -73,21 +72,14 @@ class sfWidgetFormMAUGFileUpload extends sfWidgetFormInput {
         $file_types = $this->getOption('file_types') ? implode(",", $this->getOption('file_types')) : "all";
         if (!$this->getOption("callback")) {
             $callbackUrl = sfContext::getInstance()->getRouting()->generate(
-                "uploader_list", array(
-                    "parent_id" => $this->getOption('parent_id'),
-                    "file_types" => $file_types
-            ));
+                "uploader_list");
         }else{
             $callbackUrl = $this->getOption("callback");
         }
 
         if (!$this->getOption("upload_method")) {
             $uploadUrl = sfContext::getInstance()->getRouting()->generate(
-                "uploader_upload", array(
-                    "parent_id" => $this->getOption('parent_id'),
-                    "file_types" => $file_types,
-                    "upload_config" => $this->getOption('upload_config'),
-            ));
+                "uploader_upload");
         }else{
             $uploadUrl = $this->getOption("upload_method");
         }
@@ -95,6 +87,7 @@ class sfWidgetFormMAUGFileUpload extends sfWidgetFormInput {
         $upload_config = sfConfig::get("app_uploader_upload_config");
         
         $render = include_partial($this->getOption('uploaderTemplate'), array(
+            "upload_config" => $this->getOption('upload_config'),
             "parent_id" => $this->getOption('parent_id'),
             "button_label" => $this->getOption('button_label'),
             "file_types" => $file_types,

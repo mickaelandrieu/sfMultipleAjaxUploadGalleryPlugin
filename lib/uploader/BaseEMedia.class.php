@@ -35,13 +35,13 @@ class BaseEMedia implements Uploadable {
             $className = $this->config['entity_class_name'];
             $entity->{SfMaugUtils::camelize("set".$this->config['entity_column_name'])}($this->getType());
         }else{
-            $className = ucfirst($this->type);
+            $className = ucfirst($this->getType());
             $entity = new $className();
         }
         
-        $entity->$this->config[$this->type."_filename_column"]($this->getName());
-        $entity->{SfMaugUtils::camelize("set".$this->config['entity_aggregate_columnid'])}($this->getParentId());
-        $entity->{SfMaugUtils::camelize("set".$this->config[$this->type."_size_column"])}($this->getSize());
+        $entity->{"set".$this->config[strtolower($this->getType())."_filename_column"]}($this->getName());
+        $entity->{lcfirst(SfMaugUtils::camelize("set".$this->config['entity_aggregate_columnid']))}($this->getParentId());
+        $entity->{lcfirst(SfMaugUtils::camelize("set".$this->config[strtolower($this->getType())."_size_column"]))}($this->getSize());
         $this->setPath($entity->getPath());
         $entity->save();
         return $entity;
@@ -53,15 +53,17 @@ class BaseEMedia implements Uploadable {
         if($this->config['relation_type']=="enum"){
             $className = $this->config['entity_class_name'];
             $entity->{"set".$this->config['entity_column_name']}($this->getType());
+            $columnId = $this->config['entity_column_name'];
         }else{
-            $className = ucfirst($this->type);
+            $className = ucfirst($this->getType());
+            $columnId = $this->config['entity_aggregate_columnid'];
             $entity = new $className();
         }
         
         $fullSize = $this->getSize();
-        $files = Doctrine::getTable($className)->createQuery("f")->where("f.".$this->config['entity_column_name']." = ?",$this->getParentId())->execute();
+        $files = Doctrine::getTable($className)->createQuery("f")->where("f.".$columnId." = ?",$this->getParentId())->execute();
         foreach ($files as $file) {
-            $fullSize+=$file->{SfMaugUtils::camelize("get".$this->config[$this->type."_size_column"])}();
+            $fullSize+=$file->{lcfirst(SfMaugUtils::camelize("get".$this->config[strtolower($this->getType())."_size_column"]))}();
         }
         if( $files->count() > $this->config[strtolower($this->getType())."_max_number"]){
             $this->errors[] = "Vous avez atteint la limite de fichiers uploadés, tous types de fichiers confondus. Max (" . ceil($this->config["global_max_weight"] / (1024 * 1024)) . "Mo)";
