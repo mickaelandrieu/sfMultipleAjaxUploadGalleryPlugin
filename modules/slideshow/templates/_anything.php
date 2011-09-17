@@ -1,6 +1,5 @@
 <?php use_helper("I18N") ?>
 <?php use_stylesheet("../sfMultipleAjaxUploadGalleryPlugin/slideshow/anything/css/anythingslider.css") ?>
-<?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/global/js/jquery-1.5.2.min.js");?>
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/global/js/jquery-ui.min.js");?>
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/anything/js/jquery.anythingslider.min.js");?>
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/anything/js/jquery.anythingslider.fx.js");?>
@@ -10,25 +9,24 @@
     $correctPath = SfMaugUtils::gallery_path();
 ?>
 
-<ul id="slider1">
+<ul id="slider_anything_<?php echo $gallery->getSlug()?>" style="width: 700px; height: 390px;">
         <?php foreach ($gallery->getPhotos() as $photo) { ?>
             <li>
-                <a name="<?php echo $photo->getTitle() ?>" href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
+                <a name="<?php echo $photo->getTitle() ?>" rel="gallery" class="fancybox-gallery" href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
                     <img src="<?php echo $correctPath.$gallery->getSlug()."/".SfMaugUtils::getMaxSize()."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
                 </a>
-                            <?php echo $photo->getTitle() ?>
-                </div>
+                <?php echo $photo->getTitle() ?>
             </li>
         <?php } ?>
 
 </ul>
 
 <script type="text/javascript">
-$('#slider1').anythingSlider({
+$('#slider_anything_<?php echo $gallery->getSlug()?>').anythingSlider({
   // Appearance
-  width               : null,      // Override the default CSS width
-  height              : null,      // Override the default CSS height
-  resizeContents      : false,      // If true, solitary images/objects in the panel will expand to fit the viewport
+  height      : true,      // If true, solitary images/objects in the panel will expand to fit the viewport
+  width      : true,      // If true, solitary images/objects in the panel will expand to fit the viewport
+  resizeContents      : true,      // If true, solitary images/objects in the panel will expand to fit the viewport
 
   // Navigation
   startPanel          : 1,         // This sets the initial panel
@@ -46,10 +44,12 @@ $('#slider1').anythingSlider({
   resumeOnVideoEnd    : true,      // If true & the slideshow is active & a youtube video is playing, it will pause the autoplay until the video has completed
   stopAtEnd           : false,     // If true & the slideshow is active, the slideshow will stop on the last page
   playRtl             : false,     // If true, the slideshow will move right-to-left
-  startText           : "<?php echo __('Start') ?>",   // Start button text
-  stopText            : "<?php echo __('Stop') ?>",    // Stop button text
-  delay               : 3000,      // How long between slideshow transitions in AutoPlay mode (in milliseconds)
+//  startText           : '<?php echo __('Start') ?>',   // Start button text
+//  stopText            : '<?php echo __('Stop') ?>',    // Stop button text
+  delay               : 5000,      // How long between slideshow transitions in AutoPlay mode (in milliseconds)
   animationTime       : 600,       // How long the slideshow transition takes (in milliseconds)
   easing              : "swing"    // Anything other than "linear" or "swing" requires the easing plugin
 });
+$('#slider_anything_<?php echo $gallery->getSlug()?> a.fancybox-gallery').attr('rel', 'gallery').fancybox();
+
 </script>

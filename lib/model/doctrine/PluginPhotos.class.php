@@ -30,7 +30,7 @@ abstract class PluginPhotos extends BasePhotos
     }
     public function getPath()
     {
-        return $path = SfMaugUtils::gallery_path().$this->getGallery()->getSlug()."/";
+        return sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug()."/";
     }
 
     public function getPhotoId()
@@ -61,10 +61,23 @@ abstract class PluginPhotos extends BasePhotos
                 chmod(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug()."/".$filename,SfMaugUtils::getChmodValue("drwxrwxrwx"));
         }
 
-        if(file_exists($this->getFullPicpath()))
-        $this->create_thumbnails();
+//            print_r($this->getFullPicpath());exit;
+        if(file_exists($this->getFullPicpath())){
+            $this->create_thumbnails();
+        }
     }
 
+  /**
+   * Listens to the photos.create_thumbnails event.
+   *
+   * @param sfEvent An sfEvent instance
+   * @static
+   */
+    static public function create_thumbnails_task(sfEvent $event){
+        $data = $event->getParameters("data");
+        $data['photos']->create_thumbnails();
+        
+    }
 
     public function create_thumbnails()
     {

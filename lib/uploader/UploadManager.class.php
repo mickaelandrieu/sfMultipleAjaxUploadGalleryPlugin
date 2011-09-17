@@ -3,7 +3,7 @@
 class UploadManager {
 
     private $upload_config;
-    private $suffix = "/medias";
+    private $suffix = "";
     private $mediaObject;
     private $errors = array();
 
@@ -57,7 +57,7 @@ class UploadManager {
     }
 
     public function upload() {
-        $upload_dir = sfConfig::get("sf_upload_dir") . $this->suffix . "/" . $this->mediaObject->getPath() . "/";
+        $upload_dir = $this->mediaObject->getPath() . "/";
         if (!is_dir($upload_dir))
             mkdir($upload_dir, 0777, true);
         return $this->uploader->handleUpload($upload_dir);
