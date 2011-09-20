@@ -57,7 +57,7 @@ class UploadManager {
     }
 
     public function upload() {
-        $upload_dir = $this->mediaObject->getPath() . "/";
+        $upload_dir = $this->mediaObject->getPath();
         if (!is_dir($upload_dir))
             mkdir($upload_dir, 0777, true);
         return $this->uploader->handleUpload($upload_dir);

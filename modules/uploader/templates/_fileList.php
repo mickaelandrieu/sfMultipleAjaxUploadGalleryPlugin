@@ -1,3 +1,4 @@
+<div id="files_list_<?php echo $parent_id; ?>">
 <?php
 if($upload_config['relation_type'] == "related_table"){
     // files = array(
@@ -7,14 +8,15 @@ if($upload_config['relation_type'] == "related_table"){
     $fileCollection = array();
     foreach($files as $doctrineFileCollection){
         foreach($doctrineFileCollection as $file){
-            $files[] = $file;
-            switch(get_class($file)){
+            switch($file->getClassName()){
                 case "Images":
                 case "Photos":
                 case "Picture":
                 case "Image":
                 case "Photo":
-                        $src = $file->getFullPath();
+                        $src = $file->getFullPicpath(50);
+                        $srcLarge = $file->getFullPicpath();
+                        $params = "class=fancybox rel=gallery";
                         break;
                     case "Audio":
                         $src = "/sfMultipleAjaxUploadGalleryPlugin/images/files/audio.png";
@@ -29,7 +31,11 @@ if($upload_config['relation_type'] == "related_table"){
                         $src = "/sfMultipleAjaxUploadGalleryPlugin/images/files/file.png";
                         break;
             }?> 
-            <img src="<?php echo $src ?>"/> 
+                <?php if(!empty($srcLarge)){ ?>
+                    <a href="<?php echo $srcLarge ?>" <?php echo $params; ?>><?php } ?>
+                        <img src="<?php echo $src ?>"/> 
+                <?php if(!empty($srcLarge)){ ?>
+                    </a><?php } ?>
         <?php
         }
     }
@@ -65,4 +71,10 @@ if($upload_config['relation_type'] == "related_table"){
     }
 }
 ?>
+</div>
 
+<script>
+    $(document).ready(function(){
+        $('#files_list_<?php echo $parent_id; ?> a.fancybox-gallery').attr('rel', 'gallery').fancybox();
+    });
+</script>

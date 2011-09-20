@@ -22,7 +22,7 @@ abstract class PluginPhotos extends BasePhotos
     }
     public function getFullPicpath($size = false)
     {
-        $path = $this->getPath();
+        $path = SfMaugUtils::gallery_path().$this->getGallery()->getSlug()."/";
         if ($size) {
             $path .= $size."/";
         }
@@ -61,8 +61,7 @@ abstract class PluginPhotos extends BasePhotos
                 chmod(sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_path_gallery").$this->getGallery()->getSlug()."/".$filename,SfMaugUtils::getChmodValue("drwxrwxrwx"));
         }
 
-//            print_r($this->getFullPicpath());exit;
-        if(file_exists($this->getFullPicpath())){
+        if(file_exists($this->getPath().$this->getPicpath())){
             $this->create_thumbnails();
         }
     }
@@ -339,6 +338,14 @@ abstract class PluginPhotos extends BasePhotos
                 ->from('Gallery g')
 //                ->leftJoin('g.Translation t WITH t.lang = ?', sfContext::getInstance()->getUser()->getCulture())
                 ->where('g.id = ?',$this->getGalleryId())->fetchOne();
+    }
+    
+    /**
+     * Fucking sfOutputEscaperIteratorDecorator
+     * @return type 
+     */
+    public function getClassName(){
+        return "Photos";
     }
 
 }
