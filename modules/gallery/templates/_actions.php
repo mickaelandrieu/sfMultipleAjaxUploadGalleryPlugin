@@ -1,4 +1,4 @@
-<div id="actions_<?php echo $photo->getId() ?>" class="sfmaug-actions">
+<div id="actions_<?php echo $photo->getId() ?>" class="sfmaug-actions well">
 <a href="#" onclick="$('#actions_<?php echo $photo->getId() ?>').hide('slow');return false;" style="float: left;">
     <img src="/sfMultipleAjaxUploadGalleryPlugin/images/back.png" alt="hide" title="<?php echo __("hide",array(),"sfmaug") ?>"/>
 </a>

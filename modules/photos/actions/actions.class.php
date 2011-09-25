@@ -116,7 +116,7 @@ class photosActions extends autoPhotosActions
            $message = $ok==true? "La photo a bien été réduite":"Erreur dans la modification de la photo";
 
             $this->getUser()->setFlash('ajax_notice',$message);
-            return $this->renderPartial('gallery/photoListe', array('photos'=> $gallery->getPhotos()));
+            return $this->renderPartial('gallery/photoList', array('photos'=> $gallery->getPhotos()));
         }
     }
 

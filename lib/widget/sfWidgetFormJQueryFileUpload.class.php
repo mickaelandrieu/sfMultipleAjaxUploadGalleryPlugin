@@ -20,6 +20,17 @@ class sfWidgetFormMAUGFileUpload extends sfWidgetFormInput {
      *  * with_delete:  Whether to add a delete button or not
      *
      * @param array $options     An array of options
+            parent_id
+            upload_method
+            upload_config
+            callback
+            with_delete
+            file_types
+            help_message_1
+            help_message_2
+            button_label
+            uploaderTemplate
+            btn_template
      * @param array $attributes  An array of default HTML attributes
      *
      * @see sfWidgetFormInput
@@ -27,17 +38,14 @@ class sfWidgetFormMAUGFileUpload extends sfWidgetFormInput {
     protected function configure($options = array(), $attributes = array()) {
         parent::configure($options, $attributes);
 
-        $this->setOption('type', 'file');
-        $this->setOption('needs_multipart', true);
-
+        $this->addRequiredOption('parent_id');
         $this->addOption('upload_method', null);
         $this->addOption('upload_config', 'default');
-        $this->addOption('callback', null);
+        $this->addOption('callback', 'uploader/list');
         $this->addOption('with_delete', true);
         $this->addOption('file_types', null);
         $this->addOption('help_message_1',null);
         $this->addOption('help_message_2',null);
-        $this->addRequiredOption('parent_id');
         $this->addOption('button_label', "Upload");
         $this->addOption('uploaderTemplate', 'uploader/uploaderTemplate');
         $this->addOption('btn_template',"uploader/uploaderButtonTemplate");

@@ -30,9 +30,7 @@ generator:
       form:    ~
       edit:
         title:             <?php echo $i18n->__("backend.edit.title",array(),"sfmaug")."\n"; ?>
-        display:
-          "Galerie":       [id, title, description, is_active]
-          "Photos":        [_photoUpload]
+        display: [id, title, description, photos,  is_active]
         actions:
           _list: ~
           _delete: ~
@@ -42,5 +40,4 @@ generator:
             action: purge
       new:
         title:             <?php echo $i18n->__("backend.create.title",array(),"sfmaug")."\n"; ?>
-        display:
-          "Galerie":       [id, title, description]
+        display: [id, title, description]

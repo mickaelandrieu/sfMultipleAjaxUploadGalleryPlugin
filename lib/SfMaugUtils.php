@@ -133,7 +133,14 @@ class SfMaugUtils {
     }
 
     public static function camelize($text) {
-        return preg_replace(array('#/(.?)#e', '/(^|_|-)+(.)/e'), array("'::'.strtoupper('\\1')", "strtoupper('\\2')"), $text);
+        $camelized = preg_replace(array('#/(.?)#e', '/(^|_|-)+(.)/e'), array("'::'.strtoupper('\\1')", "strtoupper('\\2')"), $text);
+        if (!function_exists('lcfirst')) {
+            function lcfirst($string) {
+            return substr_replace($string, strtolower(substr($string, 0, 1)), 0, 1);
+            }
+        }
+        return lcfirst($camelized);
+        
     }
 
 }

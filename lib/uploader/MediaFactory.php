@@ -11,14 +11,21 @@ class EMediaFactory {
         foreach($mimesExtensions as $type=>$extensions){
             //Construct the regex to check the extension
             ${$type."regex"} = "/\.".implode("|",$extensions)."$/";
-            //check the extension
+
+	    //Get the file
+
+            $file = $_GET["qqfile"];
+            if ($file == "")
+            $file = $_FILES['qqfile']['name'];
             
-            if(preg_match(${$type."regex"},strtolower($_GET["qqfile"]))){
+	    //check the extension
+            
+            if(preg_match(${$type."regex"},strtolower($file))){
                 //EImage, EAudio, EVideo, EDocument
                 $mediaClass = class_exists("E".ucfirst($type))?"E".ucfirst($type):"BaseEMedia";
                 //entity type definition from the config
                 
-                $object = new $mediaClass(ucfirst($type),$_GET["qqfile"],$config);
+                $object = new $mediaClass(ucfirst($type),$file,$config);
             }
         }
         

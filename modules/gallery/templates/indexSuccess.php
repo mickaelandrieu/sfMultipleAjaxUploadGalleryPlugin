@@ -1,11 +1,12 @@
 <?php include_partial('gallery/assets') ?>
+<?php include_partial('gallery/list_actions', array('helper' => $helper)) ?>
+<hr/>
 
 <?php if($pager->count()){ ?>
 <link href="/galleryview/css/jquery.galleryview-3.0.css" media="screen" type="text/css" rel="stylesheet">
 
 
 <div class="sf_admin smaugv">
-<?php include_partial('gallery/list_actions', array('helper' => $helper)) ?>
     <div id="smaugv-others">
         <h2>Galleries</h2>
         <div>
@@ -16,7 +17,7 @@
                           <!-- this way we remember where the user is (gallery and page -->
                             <a title="<?php echo __("Editer") ?>" href="<?php echo url_for("gallery/edit?id=".$g->getId()) ?>"
                                style="background-image:url(<?php echo $g->getPhotoDefault() ?>);">
-                                <span class="disposition alpha60"><?php echo "<span style='font-weight:bold'>".$g->getTitle()."</span><br/>".$g->getDescription() ?></span>
+                                <span class="disposition alpha60"><?php echo "<span style='font-weight:bold'>".$g->getTitle()."</span><br/>".$g->getDescription(ESC_RAW) ?></span>
                             </a>
                         </li>
                     <?php } ?>

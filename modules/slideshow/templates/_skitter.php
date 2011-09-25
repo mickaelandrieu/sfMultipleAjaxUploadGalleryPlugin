@@ -1,5 +1,4 @@
 <?php use_stylesheet("../sfMultipleAjaxUploadGalleryPlugin/slideshow/skitter/css/skitter.styles.css") ?>
-<?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/skitter/js/jquery-ui.min.js");?>
 <?php use_javascript("../sfMultipleAjaxUploadGalleryPlugin/slideshow/skitter/js/jquery.skitter.min.js");?>
 
 <?php
@@ -11,7 +10,7 @@ $correctPath = SfMaugUtils::gallery_path();
         <?php foreach ($gallery->getPhotos() as $photo) { ?>
             <li>
                 <a class="block" name="<?php echo $photo->getTitle() ?>"  rel="gallery" class="fancybox-gallery"  href="<?php echo $correctPath.$gallery->getSlug()."/".$photo->getPicPath() ?>" title="<?php echo $photo->getTitle() ?>">
-                    <img src="<?php echo $correctPath.$gallery->getSlug()."/".SfMaugUtils::getMaxSize()."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
+                    <img src="<?php echo $correctPath.$gallery->getSlug()."/".sfConfig::get('app_sfMultipleAjaxUploadGalleryPlugin_skitter_size')."/".$photo->getPicPath() ?>" alt="<?php echo $photo->getTitle() ?>" />
                 </a>
                 <div class="label_text">
                     <p>Texte : <?php echo $photo->getTitle() ?></p>
@@ -73,7 +72,7 @@ $correctPath = SfMaugUtils::gallery_path();
             fullscreen: <?php echo $isFullscreen ?>
         }
     );
-    $('.box_skitter_large#slider_skitter_<?php echo $gallery->getSlug()?> a.fancybox-gallery').attr('rel', 'gallery').fancybox();
+    //$('.box_skitter_large#slider_skitter_<?php echo $gallery->getSlug()?> a.fancybox-gallery').attr('rel', 'gallery').fancybox();
     });
 
 

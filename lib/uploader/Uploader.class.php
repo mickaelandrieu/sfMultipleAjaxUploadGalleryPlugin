@@ -40,7 +40,7 @@ class qqUploadedFileXhr {
         if (isset($_SERVER["CONTENT_LENGTH"])){
             return (int)$_SERVER["CONTENT_LENGTH"];
         } else {
-            throw new Exception('La taille du contenu est trop grande');
+            throw new Exception('Problème lors de l\'upload : Code #U43');
         }
     }
 }
@@ -116,7 +116,7 @@ class qqFileUploader {
 
         if($this->allowedExtensions && !in_array(strtolower($ext), $this->allowedExtensions)){
             $these = implode(', ', $this->allowedExtensions);
-            return array('error' => __("Le fichier posède une extension invalide : "). $these . '.');
+            return array('error' => "Le fichier posède une extension invalide : ". $these . '.');
         }
 
         if(!$replaceOldFile){
@@ -136,8 +136,8 @@ class qqFileUploader {
         if ($this->file->save($uploadDirectory . $filename . '.' . $ext)){
             return $filename.".".strtolower($ext);
         } else {
-            return array('error'=>  __("Impossible d'enregistrer le fichier").
-            __("La procédure a été annulé"));
+            return array('error'=>  "Impossible d'enregistrer le fichier".
+            "La procédure a été annulé");
         }
 
     }

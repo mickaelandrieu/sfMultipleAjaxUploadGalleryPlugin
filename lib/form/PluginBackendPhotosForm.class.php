@@ -14,9 +14,5 @@ class PluginBackendPhotosForm extends PluginPhotosForm {
     protected function removeFields() {
         unset($this['created_at'], $this['updated_at'], $this['slug'], $this['is_default']);
     }
-
-    /*public function generatePicpathFilename(sfValidatedFile $file) {
-        return $file->getOriginalName();
-    }*/
 }
 ?>

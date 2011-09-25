@@ -191,13 +191,13 @@ table.mediumtable{
     left: -20px;
     opacity: 0.75;
     position: absolute;
-    width: 175px;
+    width: 180px;
     z-index: 10001;
     padding: 10px;
 }
 
 #photos-list .defaultPicture .contextual {
-    width: 145px;
+    width: 165px;
 }
 
 #photos-list .contextual a{

@@ -7,7 +7,7 @@
  */
 class EImage extends BaseEMedia {
 
-    protected $_type = "Images";
+    protected $_type = "Image";
 
     public function isValid() {
         if (parent::isValid()) {

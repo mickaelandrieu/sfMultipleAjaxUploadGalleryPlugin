@@ -33,7 +33,8 @@ class Doctrine_Template_Gallerify extends Doctrine_Template {
     {
         $this->hasOne('Gallery as Gallery', array(
                 'local' => $this->_options['gallery_id']['name'],
-                'foreign' => 'id'
+                'foreign' => 'id',
+                'onDelete'=>'SET NULL'
             )
         );
     }

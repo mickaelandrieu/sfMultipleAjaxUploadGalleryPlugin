@@ -18,6 +18,8 @@ all:
       - 300
       - 450
     default_size: 50 # default, if not in thumbnails_sizes array new thumbnail is created
+    skitter_size: 450
+    anything_max_height: 450
     portfolio_thumbnails_size: 150
     onDelete: cascade # none or cascade, cascade remove all gallery's files
     path_gallery: <?php echo sfConfig::get("sf_upload_dir")."/gallery/\n" ;?>
@@ -48,8 +50,8 @@ all:
 
         #Give only this information if the relation_type is set to enum or related_table
         entity_aggregate_columnid: gallery_id
-        photos_filename_column: picpath
-        photos_size_column: size
+        entity_filename_column: picpath
+        entity_size_column: size
 
         #If relation_type = enum, give here the different values
         #else if relation_type = related_table, give here the different Doctrine Class names

@@ -8,7 +8,7 @@
 
 class uploaderComponents extends sfComponents {
 
-    public function executeFileList()
+    public function executeList()
     {
         $fullConfig = sfConfig::get("app_sfMultipleAjaxUploadGalleryPlugin_uploader");
         $this->upload_config = $fullConfig[$this->upload_config];
@@ -22,17 +22,11 @@ class uploaderComponents extends sfComponents {
             }
             
         }elseif($this->upload_config['relation_type'] == 'enum'){
-            throw new Exception('Le système ne gère pas encore ce cas');
-//            $query = Doctrine::getTable($this->upload_config["aggregate_entity_class_name"])
-//                    ->createQuery("g")
-//                    ->where('g.id=?',$this->parent_id);
-//            if(is_array($this->type)){
-//            $this->files = $query->andWhereIn("pf.typefichier ",  array_values(array_intersect_key($map, array_flip(explode(",",$this->file_types)))))
-//                    ->execute();
-//            }
-            
-        }elseif($this->upload_config['relation_type'] == 'enum'){
-            
+            $this->files = Doctrine::getTable($this->upload_config["aggregate_entity_class_name"])
+                    ->createQuery("p")
+                    ->where('p.'.$this->upload_config['entity_aggregate_columnid'].'=?',$this->parent_id)
+                    ->andWhereIn("p.".$this->upload_config['entity_type_column_name'],  $this->file_types)
+                    ->execute();
         }
     }
 

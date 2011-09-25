@@ -3,7 +3,6 @@
 class UploadManager {
 
     private $upload_config;
-    private $suffix = "";
     private $mediaObject;
     private $errors = array();
 
@@ -21,19 +20,31 @@ class UploadManager {
         
         if($file_types[0] == "all") $file_types = $this->upload_config['entity_file_kinds'];
         foreach($file_types as $file_type){
-            $mimesExtensions[strtolower($file_type)] = $this->upload_config[strtolower($file_type)."_allowed_extensions"];
+            $filesExtensions[strtolower($file_type)] = $this->upload_config[strtolower($file_type)."_allowed_extensions"];
         }
-        $this->mediaObject = EMediaFactory::getMediaObject($mimesExtensions,$this->upload_config);
+        $this->mediaObject = EMediaFactory::getMediaObject($filesExtensions,$this->upload_config);
         if (!$this->mediaObject) {
             $extensions = array();
-            foreach ($mimesExtensions as $ext) {
+            foreach ($filesExtensions as $ext) {
                 $extensions = array_merge($extensions, $ext);
             }
-            $this->errors[] = "Le fichier \"" . $_GET["qqfile"] . "\" n'est pas pris en charge.<br/>
+
+
+	    //Get the file
+
+            $file = $_GET["qqfile"];
+            if ($file == "")
+            $file = $_FILES['qqfile']['name'];
+            $this->errors[] = "Le fichier \"" . $file . "\" n'est pas pris en charge.<br/>
               Vous pouvez envoyer ce type de fichiers " . implode(", ", $extensions);
         }
     }
 
+    /* Will save the media object and to stuff on it : 
+     *      - rename if a file already exists
+     *      - convert a video for example
+     *      - create thumbnails
+     */
     public function save($parent_id) {
         if($this->mediaObject){
                 $this->mediaObject->setParentId($parent_id);
@@ -46,7 +57,17 @@ class UploadManager {
                 if(is_array($response)){
                     $this->errors[] = implode(", ",$response);
                 }else{
-                    $entity->{"set".$this->upload_config[strtolower($this->mediaObject->getType())."_filename_column"]}($response);
+					if(array_key_exists($this->mediaObject->getType()."_convert_types", $this->upload_config))
+                        {
+                            $convertExtensions = $this->upload_config[$this->mediaObject->getType()."_convert_types"];
+                            $response = $this->mediaObject->convert(
+                                    $response,
+                                    sfConfig::get("sf_web_dir") . $this->mediaObject->getPath() . "/",
+                                    $convertExtensions);
+                        }
+                    //example : $entity->setFileName("file.jpg");
+                    $methodName = SfMaugUtils::camelize("set".$this->upload_config["entity_filename_column"]);
+                    $entity->$methodName($response);
                     $entity->save();
                 }
             }else{

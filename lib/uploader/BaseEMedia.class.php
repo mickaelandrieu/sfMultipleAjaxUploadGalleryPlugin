@@ -21,39 +21,47 @@ class BaseEMedia implements Uploadable {
     private $_parent_id;
     protected $errors = array();
 
+    /**
+     *
+     * @param type $type (Images,Vidéo, Audio, Text, etc)
+     * @param type $name (File name)
+     * @param type $config (config name, defined in app.yml of Plugin)
+     */
     public function __construct($type,$name,$config) {
         $this->_name = $name;
         $this->config = $config;
-        $this->_type = $type;
-        $this->_allowed_extensions = $config[strtolower($type)."_allowed_extensions"];
-        $this->_limit_max = $config[strtolower($type)."_unit_max_weight"];
+        $this->_type = SfMaugUtils::slugify(strtolower($type));
+        $this->_allowed_extensions = $config[$this->_type."_allowed_extensions"];
+        $this->_limit_max = $config[$this->_type."_unit_max_weight"];
     }
 
     public function save() {
-        /** Save the file in the correct table in db */
+        /** Save the file in the correct table in db, check the config */
         if($this->config['relation_type']=="enum"){
-            $className = $this->config['entity_class_name'];
-            $entity->{SfMaugUtils::camelize("set".$this->config['entity_column_name'])}($this->getType());
+            $className = $this->config['aggregate_entity_class_name'];
+        	$this->entity = new $className();
+            $this->entity->{SfMaugUtils::camelize("set".$this->config['entity_type_column_name'])}($this->getType());
         }else{
             $className = ucfirst($this->getType());
-            $entity = new $className();
+        	$this->entity = new $className();
         }
         
-        $entity->{"set".$this->config[strtolower($this->getType())."_filename_column"]}($this->getName());
-        $entity->{lcfirst(SfMaugUtils::camelize("set".$this->config['entity_aggregate_columnid']))}($this->getParentId());
-        $entity->{lcfirst(SfMaugUtils::camelize("set".$this->config[strtolower($this->getType())."_size_column"]))}($this->getSize());
-        $this->setPath($entity->getPath());
-        $entity->save();
-        return $entity;
+        $this->entity->{"set".$this->config["entity_filename_column"]}($this->getName());
+        $this->entity->{SfMaugUtils::camelize("set".$this->config['entity_aggregate_columnid'])}($this->getParentId());
+        $this->entity->{SfMaugUtils::camelize("set".$this->config["entity_size_column"])}($this->getSize());
+        $this->setPath($this->entity->getPath());
+        $this->entity->save();
+        return $this->entity;
     }
 
     public function isValid() {
         //test extension
         //test size
         if($this->config['relation_type']=="enum"){
-            $className = $this->config['entity_class_name'];
-            $entity->{"set".$this->config['entity_column_name']}($this->getType());
-            $columnId = $this->config['entity_column_name'];
+            $className = $this->config['aggregate_entity_class_name'];
+            $this->entity = new $className();
+            $this->entity->{"set".$this->config['entity_type_column_name']}($this->getType());
+            $columnId = $this->config['entity_aggregate_columnid'];
         }else{
             $className = ucfirst($this->getType());
             $columnId = $this->config['entity_aggregate_columnid'];
@@ -63,7 +71,7 @@ class BaseEMedia implements Uploadable {
         $fullSize = $this->getSize();
         $files = Doctrine::getTable($className)->createQuery("f")->where("f.".$columnId." = ?",$this->getParentId())->execute();
         foreach ($files as $file) {
-            $fullSize+=$file->{lcfirst(SfMaugUtils::camelize("get".$this->config[strtolower($this->getType())."_size_column"]))}();
+            $fullSize+=$file->{SfMaugUtils::camelize("get".$this->config["entity_size_column"])}();
         }
         if( $files->count() > $this->config[strtolower($this->getType())."_max_number"]){
             $this->errors[] = "Vous avez atteint la limite de fichiers uploadés, tous types de fichiers confondus. Max (" . ceil($this->config["global_max_weight"] / (1024 * 1024)) . "Mo)";
@@ -79,6 +87,16 @@ class BaseEMedia implements Uploadable {
             }
         }
         return empty($this->errors) ? true : false;
+    }
+
+    public function convert($newFileName, $path, $convertExtensions=array()) {
+        if($this->config['relation_type']=="enum"){
+            $methodName = lcfirst(UploaderUtils::camelize("set".$this->config["entity_filename_column"]));
+        }else{
+            $methodName = lcfirst(UploaderUtils::camelize("set".$this->config[UploaderUtils::slugify(strtolower($this->getType()))."_filename_column"]));
+        }
+        $this->entity->$methodName($newFileName);
+        return $newFileName;
     }
 
     public function getPath() {
